@@ -37,12 +37,11 @@ public class TimeLine {
            listOfTimeFrames.add(currentFrame);
            currentFrame = new TimeFrame(interval.name());
            refreshTime = updateRefreshTime();
-           System.out.println(refreshTime);
        }
     }
 
     public void getAnalytics(){
         for (TimeFrame t : listOfTimeFrames)
-            System.out.println(t + "    " + t.topGenre());
+            System.out.println(t + "    " + t.topGenre() + "    " + t.mostPopularArtist() + "     " + t.averageLoudness() + "     " + t.averageBPM());
     }
 }

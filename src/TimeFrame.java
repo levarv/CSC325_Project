@@ -1,6 +1,7 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class TimeFrame {
 
@@ -36,6 +37,52 @@ public class TimeFrame {
             }
 
         return mostPopularGenre;
+    }
+
+    public int averageLoudness() {
+        int sum = 0;
+        int n = 0;
+
+        for (Song s : musicList) {
+            sum += s.getLoudness();
+            ++n;
+        }
+        return (sum / n);
+    }
+
+    public int averageBPM() {
+        int sum = 0;
+        int n = 0;
+
+        for (Song s : musicList) {
+            sum += s.getBpm();
+            ++n;
+        }
+        return (sum / n);
+    }
+
+    public String mostPopularArtist() {
+        HashMap<String, Integer> map = new HashMap<>();
+        String mostPopularArtist = null;
+        int max = 0;
+
+        for (Song s : musicList)
+            if (map.containsKey(s.getArtist())) {
+                map.compute(
+                        s.getArtist(),
+                        (k, count)->{return (count == null ? 0 : count) + 1;}
+                );
+            }
+            else
+                map.put(s.getArtist(),0);
+
+        for (String s : map.keySet())
+            if (Math.max(max,map.get(s)) == map.get(s)) {
+                max = map.get(s);
+                mostPopularArtist = s;
+            }
+
+        return mostPopularArtist;
     }
 
     @Override
