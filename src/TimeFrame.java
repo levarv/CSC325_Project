@@ -1,12 +1,11 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class TimeFrame {
 
     private enum Scale { MINUTE, HOUR, DAY, WEEK, MONTH; }
-    private Scale scale;
+    private final Scale scale;
     private final LocalDateTime created = LocalDateTime.now();
     private final ArrayList<Song> musicList;
 
@@ -37,5 +36,14 @@ public class TimeFrame {
             }
 
         return mostPopularGenre;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeFrame{" +
+                "scale=" + scale +
+                ", created=" + created +
+                ", musicList=" + musicList +
+                '}';
     }
 }

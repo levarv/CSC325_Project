@@ -8,7 +8,7 @@ public class Main {
         u.start();
 
         try {
-            sleep(10000);
+            sleep(180000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

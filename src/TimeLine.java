@@ -1,63 +1,48 @@
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class TimeLine {
 
-    private enum Scale {
-        MINUTE(LocalDateTime.now(), LocalDateTime.now().plusMinutes(1L), "MINUTE"),
-        HOUR(LocalDateTime.now(), LocalDateTime.now().plusHours(1L), "HOUR"),
-        DAY(LocalDateTime.now(), LocalDateTime.now().plusDays(1L), "DAY"),
-        WEEK(LocalDateTime.now(), LocalDateTime.now().plusWeeks(1L), "WEEK"),
-        MONTH(LocalDateTime.now(), LocalDateTime.now().plusMonths(1L), "MONTH");
-        private String timeFrameType;
-        private LocalDateTime startOfTimeFrame;
-        private LocalDateTime endOfTimeFrame;
-
-        private Scale(LocalDateTime startOfTimeFrame, LocalDateTime endOfTimeFrame, String timeFrameType){
-            this.startOfTimeFrame = startOfTimeFrame;
-            this.endOfTimeFrame = endOfTimeFrame;
-            this.timeFrameType = timeFrameType;
-        }
-        public String getTimeFrameType() { return timeFrameType; }
-        public LocalDateTime getStartOfTimeFrame() { return startOfTimeFrame; }
-        public LocalDateTime getEndOfTimeFrame() { return endOfTimeFrame;}
-    }
-
-    private Scale timeFrameInfo; //
-    private LinkedList<TimeFrame> listOfTimeFrames;
+    private enum Scale { MINUTE,HOUR,DAY,WEEK,MONTH; }
+    private LocalDateTime refreshTime = LocalDateTime.now();
+    private Scale interval;
+    private final LinkedList<TimeFrame> listOfTimeFrames;
+    private TimeFrame currentFrame;
 
     public TimeLine (String scale) {
         try {
-            timeFrameInfo = Scale.valueOf(scale);
+            interval = Scale.valueOf(scale);
         } catch (IllegalArgumentException e) {
             System.out.println("Acceptable arg: MINUTE | HOUR | DAY | WEEK | MONTH");
         }
         listOfTimeFrames = new LinkedList<>();
+        refreshTime = updateRefreshTime();
+        currentFrame = new TimeFrame(interval.name());
+    }
+
+    public LocalDateTime updateRefreshTime(){
+        return switch (interval) {
+            case MINUTE -> refreshTime.plusMinutes(1L);
+            case HOUR -> refreshTime.plusHours(1L);
+            case DAY -> refreshTime.plusDays(1L);
+            case WEEK -> refreshTime.plusWeeks(1L);
+            case MONTH -> refreshTime.plusMonths(1L);
+        };
     }
 
     public void addSong(Song song) {
-       if (listOfTimeFrames.isEmpty()) {
-           TimeFrame entry = new TimeFrame(timeFrameInfo.getTimeFrameType());
-           entry.add(song);
-           listOfTimeFrames.add(entry);
-       }
-       else if (LocalDateTime.now().isAfter(timeFrameInfo.getEndOfTimeFrame())) {
-           TimeFrame entry = new TimeFrame(timeFrameInfo.getTimeFrameType());
-           entry.add(song);
-           listOfTimeFrames.add(entry);
-       }
-       else {
-           listOfTimeFrames.peekFirst().add(song);
+        currentFrame.add(song);
+
+       if (LocalDateTime.now().isAfter(refreshTime)) {
+           listOfTimeFrames.add(currentFrame);
+           currentFrame = new TimeFrame(interval.name());
+           refreshTime = updateRefreshTime();
+           System.out.println(refreshTime);
        }
     }
 
-    public String getAnalytics(){
-        LinkedList<String> list = new LinkedList<>();
-
+    public void getAnalytics(){
         for (TimeFrame t : listOfTimeFrames)
-            list.add(t.topGenre().toString());
-
-        return list.toString();
+            System.out.println(t + "    " + t.topGenre());
     }
 }
