@@ -1,7 +1,8 @@
+package testbench;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class TimeFrame {
 
@@ -87,7 +88,7 @@ public class TimeFrame {
 
     @Override
     public String toString() {
-        return "TimeFrame{" +
+        return "testbench.TimeFrame{" +
                 "scale=" + scale +
                 ", created=" + created +
                 ", musicList=" + musicList +

@@ -1,3 +1,5 @@
+package testbench;
+
 import java.util.*;
 
 public class Song {
@@ -64,7 +66,7 @@ public class Song {
 
     @Override
     public String toString() {
-        return "Song{" +
+        return "testbench.Song{" +
                 "genre=" + genre +
                 ", name='" + name + '\'' +
                 ", loudness=" + loudness +
