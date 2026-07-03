@@ -12,5 +12,4 @@ public interface Scorable {
 
     public double artistScore(Timeline t);
 
-    public double aggregate(Timeline t);
 }

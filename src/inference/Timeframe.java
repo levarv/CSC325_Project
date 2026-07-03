@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class Timeframe {
 
-    private enum Scale {MINUTE, HOUR, DAY, WEEK, MONTH; }
+    private enum Scale {TENSECOND, MINUTE, HOUR, DAY, WEEK, MONTH; }
     private final Scale scale;
     private final LocalDateTime created = LocalDateTime.now();
     private final ArrayList<Song> musicList;
@@ -22,7 +22,7 @@ public class Timeframe {
 
     public void add(Song song) {
         musicList.add(song);
-        myTimeline.getCountingMap().compute(
+        myTimeline.getGenreCountMap().compute(
                 song.getGenre(),
                 (k, count)->{return (count == null ? 0 : count) + 1;}
         );

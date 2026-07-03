@@ -15,7 +15,7 @@ public class Song implements Scorable {
     private final String artist;
     private final int bpm;
     private Media media;
-    private LocalDateTime listenedTo;
+    private LocalDateTime lastListenedTo;
     private static final HashMap<Genre, Integer> genreCountMap = instantiate();
 
     //test constructor
@@ -27,7 +27,6 @@ public class Song implements Scorable {
         this.artist = artist;
     }
 
-    //test constructor
     public Song(String name, int loudness, int bpm, String genre, String artist, Media media) {
         this.name = name;
         this.loudness = loudness;
@@ -37,37 +36,49 @@ public class Song implements Scorable {
         this.media = media;
     }
 
+
+    public void getMetaData() {}
+
     @Override
     public double genreScore(Timeline t) {
-        return 0;
+        Map<Genre,Integer> map = t.getGenreCountMap();
+
+        Integer thisCount = map.get(this.genre);
+        Integer topCount = map.get(t.mostPopularGenre());
+
+        if (thisCount != null && topCount != null)
+            return (double) thisCount / topCount;
+        else
+            return -1.0;
     }
 
     @Override
     public double BPMScore(Timeline t) {
-        return 0;
+        Double avgBpm = t.averageBPM();
+        Integer thisBpm = this.bpm;
+
+        if (avgBpm != null && thisBpm != null)
+            return Math.abs(t.averageBPM() - this.bpm) / t.averageBPM();
+        else
+            return -1.0;
     }
 
     @Override
     public double loudnessScore(Timeline t) {
-        return 0;
+        return Math.abs(t.averageLoudness() - this.loudness) / t.averageLoudness();
     }
 
     @Override
     public double artistScore(Timeline t) {
-        return 0;
-    }
-
-    @Override
-    public double aggregate(Timeline t) {
-        return 0;
+        return -1;
     }
 
     public void setMedia(Media media) {
         this.media = media;
     }
 
-    public void setListenedTo(LocalDateTime listenedTo) {
-        this.listenedTo = listenedTo;
+    public void setLastListenedTo(LocalDateTime lastListenedTo) {
+        this.lastListenedTo = lastListenedTo;
     }
 
     private static HashMap<Genre, Integer> instantiate() {
