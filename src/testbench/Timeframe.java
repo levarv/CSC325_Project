@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TimeFrame {
+public class Timeframe {
 
     private enum Scale { MINUTE, HOUR, DAY, WEEK, MONTH; }
     private final Scale scale;
     private final LocalDateTime created = LocalDateTime.now();
     private final ArrayList<Song> musicList;
 
-    public TimeFrame(String s) {
+    public Timeframe(String s) {
         scale = Scale.valueOf(s);
         musicList = new ArrayList<>();
     }

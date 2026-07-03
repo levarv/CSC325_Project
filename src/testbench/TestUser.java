@@ -7,11 +7,11 @@ import java.util.Random;
 public class TestUser extends Thread{
 private String name;
 public TestUser(String name, ThreadGroup g) {super(g, name);}
-private TimeLine timeline;
+private Timeline timeline;
 private boolean running = true;
 
     public void run(){
-        timeline = new TimeLine("MINUTE");
+        timeline = new Timeline("MINUTE");
         Random rng = new Random();
         while (running) {
             try {
@@ -25,7 +25,6 @@ private boolean running = true;
 
     @Override
     public void interrupt() {
-        timeline.getAnalytics();
         running = false;
     }
 }
