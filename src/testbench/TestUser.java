@@ -1,5 +1,8 @@
 package testbench;
 
+import inference.Timeline;
+import model.Song;
+
 import java.util.Random;
 /*
     Test Class

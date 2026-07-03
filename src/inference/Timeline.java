@@ -1,8 +1,11 @@
-package testbench;
+package inference;
+
+import model.Song;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Timeline {
 
@@ -12,6 +15,9 @@ public class Timeline {
     private final LinkedList<Timeframe> listOfTimeframes;
     private Timeframe currentFrame;
 
+    private Map<Song.Genre,Integer> countingMap = Song.getGenreCountMap();
+
+
     public Timeline(String scale) {
         try {
             interval = Scale.valueOf(scale);
@@ -20,7 +26,7 @@ public class Timeline {
         }
         listOfTimeframes = new LinkedList<>();
         refreshTime = updateRefreshTime();
-        currentFrame = new Timeframe(interval.name());
+        currentFrame = new Timeframe(interval.name(),this);
     }
 
     public LocalDateTime updateRefreshTime(){
@@ -36,12 +42,16 @@ public class Timeline {
         };
     }
 
+    public Map<Song.Genre, Integer> getCountingMap() {
+        return countingMap;
+    }
+
     public void addSong(Song song) {
         currentFrame.add(song);
 
        if (LocalDateTime.now().isAfter(refreshTime)) {
            listOfTimeframes.add(currentFrame);
-           currentFrame = new Timeframe(interval.name());
+           currentFrame = new Timeframe(interval.name(), this);
            refreshTime = updateRefreshTime();
        }
     }

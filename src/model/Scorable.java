@@ -1,4 +1,6 @@
-package testbench;
+package model;
+
+import inference.Timeline;
 
 public interface Scorable {
 

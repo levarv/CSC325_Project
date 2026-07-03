@@ -1,4 +1,6 @@
-package testbench;
+package inference;
+
+import model.Song;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,22 +8,29 @@ import java.util.HashMap;
 
 public class Timeframe {
 
-    private enum Scale { MINUTE, HOUR, DAY, WEEK, MONTH; }
+    private enum Scale {MINUTE, HOUR, DAY, WEEK, MONTH; }
     private final Scale scale;
     private final LocalDateTime created = LocalDateTime.now();
     private final ArrayList<Song> musicList;
+    private final Timeline myTimeline;
 
-    public Timeframe(String s) {
+    public Timeframe(String s, Timeline myTimeline) {
         scale = Scale.valueOf(s);
+        this.myTimeline = myTimeline;
         musicList = new ArrayList<>();
     }
 
     public void add(Song song) {
         musicList.add(song);
+        myTimeline.getCountingMap().compute(
+                song.getGenre(),
+                (k, count)->{return (count == null ? 0 : count) + 1;}
+        );
+
     }
 
     public Song.Genre topGenre() {
-        HashMap<Song.Genre,Integer> map = Song.getUtilityMap();
+        HashMap<Song.Genre,Integer> map = Song.getGenreCountMap();
         Song.Genre mostPopularGenre = null;
         int max = 0;
 
