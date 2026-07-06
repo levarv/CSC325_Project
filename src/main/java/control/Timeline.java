@@ -1,6 +1,6 @@
-package inference;
+package control;
 
-import model.Song;
+import modelview.Song;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -9,13 +9,14 @@ import java.util.Map;
 
 public class Timeline {
 
-    private enum Scale { TENSECOND,MINUTE,HOUR,DAY,WEEK,MONTH; }
-    private LocalDateTime refreshTime;
-    private Scale interval;
-    private final LinkedList<Timeframe> listOfTimeframes;
-    private Timeframe currentFrame;
-    private final Map<Song.Genre,Integer> genreCountMap = Song.getGenreCountMap();
-    private Map<String,Integer> artistCountMap;
+    private enum Scale { TENSECOND,MINUTE,HOUR,DAY,WEEK,MONTH; } //type of timeline
+    private LocalDateTime refreshTime; //the time a new timeframe is created
+    private Scale interval; //type of time frame
+    private final LinkedList<Timeframe> listOfTimeframes; //list of all timeframes TODO (this is a stand-in structure)
+    private Timeframe currentFrame; //current timeframe songs are being added to
+    private final Map<String,Integer> genreCountMap = Main.getGenreCountMap(); //TODO implement genre count persistence
+    private Map<String,Integer> artistCountMap; //TODO implement artist count persistence
+    private double averageBPM; //TODO implement average BPM persistence
 
     public Timeline(String scale) {
         try {
@@ -42,9 +43,7 @@ public class Timeline {
         };
     }
 
-    public Map<Song.Genre, Integer> getGenreCountMap() {
-        return genreCountMap;
-    }
+    public Map<String, Integer> getGenreCountMap() {return genreCountMap;}
 
     public Map<String, Integer> getArtistCountMap() {
         return artistCountMap;
@@ -54,26 +53,30 @@ public class Timeline {
         currentFrame.add(song);
 
        if (LocalDateTime.now().isAfter(refreshTime)) {
+           System.out.print(currentFrame.averageBPM());
+           System.out.print(currentFrame.topGenre());
+           System.out.print(currentFrame.mostPopularArtist());
+
            listOfTimeframes.add(currentFrame);
            currentFrame = new Timeframe(interval.name(), this);
            refreshTime = updateRefreshTime();
        }
     }
 
-    public Song.Genre mostPopularGenre(){
-        HashMap<Song.Genre,Integer> map = new HashMap<>();
-        Song.Genre mostPopularGenre = null;
+    public String mostPopularGenre(){
+        HashMap<String,Integer> map = Main.getGenreCountMap();
+        String mostPopularGenre = null;
         int max = 0;
 
         for (Timeframe t : listOfTimeframes) {
             map.compute(
                     t.topGenre(),
                     (k, count) -> {
-                        return (count == null ? 0 : count) + 1;
+                        return count + 1;
                     }
             );
         }
-        for (Song.Genre s : map.keySet())
+        for (String s : map.keySet())
             if (Math.max(max,map.get(s)) == map.get(s)) {
                 max = map.get(s);
                 mostPopularGenre = s;
@@ -104,20 +107,6 @@ public class Timeline {
         return mostPopularArtist;
 
     }
-
-    public Double averageLoudness(){
-        double sum = 0;
-        double count = 0;
-        for (Timeframe t : listOfTimeframes) {
-            sum += t.averageLoudness();
-            ++count;
-        }
-        if (count == 0)
-            return null;
-        else
-            return sum / count;
-    }
-
 
     public Double averageBPM() {
         double sum = 0;

@@ -1,6 +1,6 @@
-package inference;
+package control;
 
-import model.Song;
+import modelview.Song;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,18 +8,27 @@ import java.util.HashMap;
 
 public class Timeframe {
 
-    private enum Scale {TENSECOND, MINUTE, HOUR, DAY, WEEK, MONTH; }
-    private final Scale scale;
-    private final LocalDateTime created = LocalDateTime.now();
-    private final ArrayList<Song> musicList;
-    private final Timeline myTimeline;
+    private enum Scale {TENSECOND, MINUTE, HOUR, DAY, WEEK, MONTH; } //timeline types
+    private final Scale scale; //type of timeline
+    private final LocalDateTime created = LocalDateTime.now(); //start of this timeframe
+    private final ArrayList<Song> musicList; //list of songs listened to in this timeframe
+    private final Timeline myTimeline; //the corresponding timeline
 
+    /**
+     * constructor
+     * @param s timeline type
+     * @param myTimeline the corresponding timeline
+     */
     public Timeframe(String s, Timeline myTimeline) {
         scale = Scale.valueOf(s);
         this.myTimeline = myTimeline;
         musicList = new ArrayList<>();
     }
 
+    /**
+     * add
+     * @param song a song that was listened to in this timeframe
+     */
     public void add(Song song) {
         musicList.add(song);
         myTimeline.getGenreCountMap().compute(
@@ -29,9 +38,13 @@ public class Timeframe {
 
     }
 
-    public Song.Genre topGenre() {
-        HashMap<Song.Genre,Integer> map = Song.getGenreCountMap();
-        Song.Genre mostPopularGenre = null;
+    /**
+     * topGenre
+     * @return topGenre with a similar methodology to Song class
+     */
+    public String topGenre() {
+        HashMap<String,Integer> map = Main.getGenreCountMap();
+        String mostPopularGenre = null;
         int max = 0;
 
         for (Song s : musicList)
@@ -40,7 +53,7 @@ public class Timeframe {
                     (k, count)->{return (count == null ? 0 : count) + 1;}
             );
 
-        for (Song.Genre s : map.keySet())
+        for (String s : map.keySet())
             if (Math.max(max,map.get(s)) == map.get(s)) {
                 max = map.get(s);
                 mostPopularGenre = s;
@@ -49,45 +62,43 @@ public class Timeframe {
         return mostPopularGenre;
     }
 
-    public int averageLoudness() {
-        int sum = 0;
-        int n = 0;
-
-        for (Song s : musicList) {
-            sum += s.getLoudness();
-            ++n;
-        }
-        return (sum / n);
-    }
-
+    /**
+     * averageBPM
+     * @return average bpm with a similar methodology to Song class
+     */
     public int averageBPM() {
         int sum = 0;
         int n = 0;
 
         for (Song s : musicList) {
-            sum += s.getBpm();
-            ++n;
+            int bpm = s.getBpm();
+            if (bpm > 0) {
+                sum += bpm;
+                ++n;
+            }
         }
-        return (sum / n);
+        if (n == 0)
+            return -1;
+        else
+            return (sum / n);
     }
 
+    /**
+     * mostPopularArtist
+     * @return most popular artist with a similar methodology to Song class
+     */
     public String mostPopularArtist() {
         HashMap<String, Integer> map = new HashMap<>();
         String mostPopularArtist = null;
         int max = 0;
-
         for (Song s : musicList)
-            if (map.containsKey(s.getArtist())) {
-                map.compute(
-                        s.getArtist(),
-                        (k, count)->{return (count == null ? 0 : count) + 1;}
-                );
-            }
-            else
-                map.put(s.getArtist(),0);
+            map.compute(
+                    s.getArtist(),
+                    (k, count)->{return (count == null ? 0 : count) + 1;}
+            );
 
         for (String s : map.keySet())
-            if (Math.max(max,map.get(s)) == map.get(s)) {
+            if (max < map.get(s)) {
                 max = map.get(s);
                 mostPopularArtist = s;
             }
@@ -95,6 +106,10 @@ public class Timeframe {
         return mostPopularArtist;
     }
 
+    /**
+     * toString
+     * @return string representation of timeframe
+     */
     @Override
     public String toString() {
         return "testbench.TimeFrame{" +
