@@ -9,15 +9,13 @@ import java.util.Map;
 
 public class Timeline {
 
-    private enum Scale { TENSECOND,MINUTE,HOUR,DAY,WEEK,MONTH; } //type of timeline
+    private final LinkedList<Timeframe> listOfTimeframes; //list of all timeframes TODO (this is a stand-in structure)
+    private final Map<String, Integer> genreCountMap = Main.getGenreCountMap(); //TODO implement genre count persistence
     private LocalDateTime refreshTime; //the time a new timeframe is created
     private Scale interval; //type of time frame
-    private final LinkedList<Timeframe> listOfTimeframes; //list of all timeframes TODO (this is a stand-in structure)
     private Timeframe currentFrame; //current timeframe songs are being added to
-    private final Map<String,Integer> genreCountMap = Main.getGenreCountMap(); //TODO implement genre count persistence
-    private Map<String,Integer> artistCountMap; //TODO implement artist count persistence
+    private Map<String, Integer> artistCountMap; //TODO implement artist count persistence
     private double averageBPM; //TODO implement average BPM persistence
-
     public Timeline(String scale) {
         try {
             interval = Scale.valueOf(scale);
@@ -26,10 +24,10 @@ public class Timeline {
         }
         listOfTimeframes = new LinkedList<>();
         refreshTime = updateRefreshTime();
-        currentFrame = new Timeframe(interval.name(),this);
+        currentFrame = new Timeframe(interval.name(), this);
     }
 
-    public LocalDateTime updateRefreshTime(){
+    public LocalDateTime updateRefreshTime() {
         if (refreshTime == null)
             return LocalDateTime.now();
 
@@ -43,7 +41,9 @@ public class Timeline {
         };
     }
 
-    public Map<String, Integer> getGenreCountMap() {return genreCountMap;}
+    public Map<String, Integer> getGenreCountMap() {
+        return genreCountMap;
+    }
 
     public Map<String, Integer> getArtistCountMap() {
         return artistCountMap;
@@ -52,19 +52,19 @@ public class Timeline {
     public void addSong(Song song) {
         currentFrame.add(song);
 
-       if (LocalDateTime.now().isAfter(refreshTime)) {
-           System.out.print(currentFrame.averageBPM());
-           System.out.print(currentFrame.topGenre());
-           System.out.print(currentFrame.mostPopularArtist());
+        if (LocalDateTime.now().isAfter(refreshTime)) {
+            System.out.print(currentFrame.averageBPM());
+            System.out.print(currentFrame.topGenre());
+            System.out.print(currentFrame.mostPopularArtist());
 
-           listOfTimeframes.add(currentFrame);
-           currentFrame = new Timeframe(interval.name(), this);
-           refreshTime = updateRefreshTime();
-       }
+            listOfTimeframes.add(currentFrame);
+            currentFrame = new Timeframe(interval.name(), this);
+            refreshTime = updateRefreshTime();
+        }
     }
 
-    public String mostPopularGenre(){
-        HashMap<String,Integer> map = Main.getGenreCountMap();
+    public String mostPopularGenre() {
+        HashMap<String, Integer> map = Main.getGenreCountMap();
         String mostPopularGenre = null;
         int max = 0;
 
@@ -77,7 +77,7 @@ public class Timeline {
             );
         }
         for (String s : map.keySet())
-            if (Math.max(max,map.get(s)) == map.get(s)) {
+            if (Math.max(max, map.get(s)) == map.get(s)) {
                 max = map.get(s);
                 mostPopularGenre = s;
             }
@@ -85,8 +85,8 @@ public class Timeline {
         return mostPopularGenre;
     }
 
-    public String mostPopularArtist(){
-        HashMap<String,Integer> map = new HashMap<>();
+    public String mostPopularArtist() {
+        HashMap<String, Integer> map = new HashMap<>();
         String mostPopularArtist = null;
         int max = 0;
 
@@ -99,7 +99,7 @@ public class Timeline {
             );
         }
         for (String s : map.keySet())
-            if (Math.max(max,map.get(s)) == map.get(s)) {
+            if (Math.max(max, map.get(s)) == map.get(s)) {
                 max = map.get(s);
                 mostPopularArtist = s;
             }
@@ -120,5 +120,7 @@ public class Timeline {
         else
             return sum / count;
     }
+
+    private enum Scale {TENSECOND, MINUTE, HOUR, DAY, WEEK, MONTH;} //type of timeline
 
 }

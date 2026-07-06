@@ -8,10 +8,10 @@ import control.Timeline;
 import javafx.scene.media.Media;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Random;
 
 public class Song implements Scorable {
 
@@ -23,9 +23,10 @@ public class Song implements Scorable {
 
     /**
      * constructor for testing
-     * @param name name of song
-     * @param bpm bpm attribute
-     * @param genre genre category
+     *
+     * @param name   name of song
+     * @param bpm    bpm attribute
+     * @param genre  genre category
      * @param artist artist name
      */
     public Song(String name, int bpm, String genre, String artist) {
@@ -37,11 +38,12 @@ public class Song implements Scorable {
 
     /**
      * constructor from database
-     * @param name name of song
-     * @param bpm bpm attribute
-     * @param genre genre category
+     *
+     * @param name   name of song
+     * @param bpm    bpm attribute
+     * @param genre  genre category
      * @param artist artist name
-     * @param file mp3 test file
+     * @param file   mp3 test file
      */
     public Song(String name, int bpm, String genre, String artist, File file) {
         this.name = name;
@@ -53,6 +55,7 @@ public class Song implements Scorable {
 
     /**
      * constructor from file picker
+     *
      * @param file mp3 test file
      */
     public Song(File file) {
@@ -64,9 +67,8 @@ public class Song implements Scorable {
                 this.bpm = mp3file.getId3v2Tag().getBPM();
                 this.genre = mp3file.getId3v2Tag().getGenreDescription();
                 this.artist = mp3file.getId3v2Tag().getArtist();
-               // this.media = new Media(file.getPath());
-            }
-            else if (mp3file.hasId3v1Tag()) {
+                // this.media = new Media(file.getPath());
+            } else if (mp3file.hasId3v1Tag()) {
                 this.name = mp3file.getId3v1Tag().getTitle();
                 this.bpm = -1;
                 this.genre = mp3file.getId3v1Tag().getGenreDescription();
@@ -83,16 +85,27 @@ public class Song implements Scorable {
         }
     }
 
+    /*
+        Test Method
+     */
+    public static Song randomSong() {
+        Random rng = new Random();
+        ArrayList<String> tempList = new ArrayList<>(Main.getGenreCountMap().keySet());
+        int rand = rng.nextInt(0, tempList.size());
+        return new Song("" + rand + rand + rand + rand, rand, tempList.get(rand), tempList.get(rand));
+    }
+
     /**
      * genreScore
+     *
      * @param t Timeline to derive score
      * @return n/N where:
-     *      n = number of times this song's genre appeared in Timeline t
-     *      N = number of times any genre appeared in Timeline t
+     * n = number of times this song's genre appeared in Timeline t
+     * N = number of times any genre appeared in Timeline t
      */
     @Override
     public double genreScore(Timeline t) {
-        Map<String,Integer> map = t.getGenreCountMap();
+        Map<String, Integer> map = t.getGenreCountMap();
 
         Integer thisCount = map.get(this.genre);
         Integer topCount = map.get(t.mostPopularGenre());
@@ -105,9 +118,10 @@ public class Song implements Scorable {
 
     /**
      * BPMScore
+     *
      * @param t Timeline to derive score
      * @return this song's error relative to the average bpm
-     *    (relative error is similar to percent error)
+     * (relative error is similar to percent error)
      */
     @Override
     public double BPMScore(Timeline t) {
@@ -122,7 +136,7 @@ public class Song implements Scorable {
     /**
      *
      * @param t Timeline t
-     *         TODO
+     *                  TODO
      * @return
      */
     @Override
@@ -132,24 +146,16 @@ public class Song implements Scorable {
 
     /**
      * setMedia
+     *
      * @param media to be set
      */
     public void setMedia(Media media) {
         this.media = media;
     }
 
-    /*
-        Test Method
-     */
-    public static Song randomSong() {
-        Random rng = new Random();
-        ArrayList<String> tempList = new ArrayList<>(Main.getGenreCountMap().keySet());
-        int rand = rng.nextInt(0, tempList.size());
-        return new Song(""+rand+rand+rand+rand,rand,tempList.get(rand),tempList.get(rand));
-    }
-
     /**
      * getGenre
+     *
      * @return genre
      */
     public String getGenre() {
@@ -158,6 +164,7 @@ public class Song implements Scorable {
 
     /**
      * getName
+     *
      * @return name
      */
     public String getName() {
@@ -166,6 +173,7 @@ public class Song implements Scorable {
 
     /**
      * getArtist
+     *
      * @return artist
      */
     public String getArtist() {
@@ -174,6 +182,7 @@ public class Song implements Scorable {
 
     /**
      * getBpm
+     *
      * @return bpm
      */
     public int getBpm() {
@@ -182,6 +191,7 @@ public class Song implements Scorable {
 
     /**
      * toString
+     *
      * @return String representation of this Song
      */
     @Override

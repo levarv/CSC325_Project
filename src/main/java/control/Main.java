@@ -1,14 +1,7 @@
 package control;
 
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
-
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -30,7 +23,7 @@ public class Main {
             Scanner scan = new Scanner(file);
             while (scan.hasNextLine()) {
                 String[] s = scan.nextLine().trim().split(",");
-                map.put(s[1],Integer.parseInt(s[0]));
+                map.put(s[1], Integer.parseInt(s[0]));
                 System.out.println(s[0] + s[1]);
             }
             System.out.println();
