@@ -1,10 +1,8 @@
-package modelview;
+package model;
 
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
-import control.Main;
-import control.Timeline;
 import javafx.scene.media.Media;
 
 import java.io.File;

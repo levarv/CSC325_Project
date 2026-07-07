@@ -1,6 +1,4 @@
-package modelview;
-
-import control.Timeline;
+package model;
 
 public interface Scorable {
 

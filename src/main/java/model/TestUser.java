@@ -1,6 +1,4 @@
-package control;
-
-import modelview.Song;
+package model;
 
 import java.io.File;
 import java.util.Random;

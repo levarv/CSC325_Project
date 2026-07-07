@@ -1,6 +1,4 @@
-package control;
-
-import modelview.Song;
+package model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
