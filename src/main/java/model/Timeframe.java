@@ -35,6 +35,12 @@ public class Timeframe {
                     return (count == null ? 0 : count) + 1;
                 }
         );
+        myTimeline.getArtistCountMap().compute(
+                song.getArtist(),
+                (k, count) -> {
+                    return (count == null ? 0 : count) + 1;
+                }
+        );
 
     }
 
@@ -57,7 +63,7 @@ public class Timeframe {
             );
 
         for (String s : map.keySet())
-            if (Math.max(max, map.get(s)) == map.get(s)) {
+            if (max < map.get(s)) {
                 max = map.get(s);
                 mostPopularGenre = s;
             }
@@ -93,9 +99,10 @@ public class Timeframe {
      * @return most popular artist with a similar methodology to Song class
      */
     public String mostPopularArtist() {
-        HashMap<String, Integer> map = new HashMap<>();
+        HashMap<String, Integer> map = Main.getArtistCountMap();
         String mostPopularArtist = null;
         int max = 0;
+
         for (Song s : musicList)
             map.compute(
                     s.getArtist(),
@@ -112,7 +119,6 @@ public class Timeframe {
 
         return mostPopularArtist;
     }
-
     /**
      * toString
      *
