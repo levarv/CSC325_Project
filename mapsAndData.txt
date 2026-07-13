@@ -1,10 +1,10 @@
-Electronic;Hip Hop;Rock=7
-Indie Rock=14
-Alternative Metal=14
+Electronic;Hip Hop;Rock=21
+Indie Rock=42
+Alternative Metal=42
 <EOD>
-Sevendust=14
-Death Grips=7
-Duster=14
+Sevendust=42
+Death Grips=21
+Duster=42
 <EOD>
 -1.0
 <EOD>

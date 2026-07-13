@@ -85,7 +85,7 @@ public class Timeline {
      */
     public void addSong(Song song) {
         currentFrame.add(song);
-
+        System.out.println(song);
         if (LocalDateTime.now().isAfter(refreshTime)) {
             listOfTimeframes.add(currentFrame);
             currentFrame = new Timeframe(interval.name(), this);

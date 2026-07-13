@@ -127,8 +127,6 @@ public class MagicSongPicker {
         list = hs2.toArray();
         String b = (String) list[index.nextInt(0,list.length)];
 
-        System.out.println("Select FROM (\n" +
-                "             SELECT FROM SONG WHERE genre = " + a +
-                "\n             ) WHERE artist = " + b);
+        System.out.println("Select FROM SONG WHERE genre = " + a + " AND artist = " + b+";");
     }
 }
