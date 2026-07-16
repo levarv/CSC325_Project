@@ -134,12 +134,22 @@ public class Song implements Scorable {
     /**
      *
      * @param t Timeline t
-     *                  TODO
-     * @return
+     *
+     * @return n/N where:
+     * n = number of times this song's artist appeared in Timeline t
+     * N = number of times any artist appeared in Timeline t
      */
     @Override
     public double artistScore(Timeline t) {
-        return -1;
+        Map<String, Integer> map = t.getArtistCountMap();
+
+        Integer thisCount = map.get(this.artist);
+        Integer topCount = map.get(t.mostPopularArtist());
+
+        if (thisCount != null && topCount != null)
+            return (double) thisCount / topCount;
+        else
+            return -1.0;
     }
 
     /**

@@ -2,39 +2,107 @@ package model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
 
 public class Main {
 
-    private static final HashMap<String, Integer> genreCountMap = instantiate();
+    private static final HashMap<String, Integer> genreCountMap = new HashMap<>();
+    private static final HashMap<String, Integer> artistCountMap = new HashMap<>();
+    private static double averageBPM = 0.0;
 
+    /**
+     * writes the map entries to a text file
+     * @param genreMap
+     * @param artistMap
+     * @param averageBpm
+     */
+    public static void writeToFile(Map<String,Integer> genreMap, Map<String,Integer> artistMap, double averageBpm) {
+        File file = new File("mapsAndData.txt");
+        try (FileWriter writer = new FileWriter(file,false)) {
+            for (Map.Entry<String, Integer> entry : genreMap.entrySet()) {
+                writer.write(entry.getKey() + "=" + entry.getValue() + "\n");
+            }
+            writer.write("<EOD>" + "\n");
+
+            for (Map.Entry<String, Integer> entry : artistMap.entrySet()) {
+                writer.write(entry.getKey() + "=" + entry.getValue() + "\n");
+            }
+            writer.write("<EOD>" + "\n");
+
+            writer.write(averageBpm + "\n");
+            writer.write("<EOD>" + "\n");
+            writer.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * readFromFile
+     * instantiates the maps from a text file.
+     */
+    public static void readFromFile(){
+        File file = new File("mapsAndData.txt");
+        String[] data = null;
+        try {
+            Scanner scan = new Scanner(file);
+
+            while (!scan.hasNext("<EOD>")) {
+                data = scan.nextLine().split("=");
+                genreCountMap.put(data[0], Integer.parseInt(data[1]));
+                System.out.println(data[1]);
+            }
+            scan.nextLine();
+
+            while (!scan.hasNext("<EOD>")) {
+                data = scan.nextLine().split("=");
+                artistCountMap.put(data[0], Integer.parseInt(data[1]));
+            }
+            scan.nextLine();
+
+            while (!scan.hasNext("<EOD>"))
+                averageBPM = Double.parseDouble(scan.nextLine());
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * getGenreCountMap
+     * @return genreCountMap
+     */
     public static HashMap<String, Integer> getGenreCountMap() {
         return genreCountMap;
     }
 
-    private static HashMap<String, Integer> instantiate() {
-        HashMap<String, Integer> map = new HashMap<>();
-        File file = new File("src/main/resources/genre.csv");
-        int index = 0;
-        try {
-            Scanner scan = new Scanner(file);
-            while (scan.hasNextLine()) {
-                String[] s = scan.nextLine().trim().split(",");
-                map.put(s[1], Integer.parseInt(s[0]));
-                System.out.println(s[0] + s[1]);
-            }
-            System.out.println();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return map;
+    /**
+     * getArtistCountMap
+     * @return artistCountMap
+     */
+    public static HashMap<String, Integer> getArtistCountMap() {
+        return artistCountMap;
     }
 
-    public static void main(String[] args) {
+    /**
+     * getAverageBPM
+     * @return averageBPM
+     */
+    public static Double getAverageBPM() {
+        return averageBPM;
+    }
 
+
+    public static void main(String[] args) {
         /*
         try {
             Mp3File mp3file = new Mp3File("Spikes.mp3");
@@ -71,11 +139,11 @@ public class Main {
         */
         ThreadGroup g = new ThreadGroup("g");
         TestUser u = new TestUser("bob", g);
-
+        readFromFile();
         u.start();
 
         try {
-            sleep(200000);
+            sleep(20000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

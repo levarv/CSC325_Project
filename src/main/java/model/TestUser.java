@@ -25,6 +25,14 @@ public class TestUser extends Thread {
 
         Timeline timeline = new Timeline("TENSECOND");
         Random rng = new Random();
+
+        MagicSongPicker mpicker = new MagicSongPicker.Builder()
+                .minutes(timeline)
+                .arg1(.5)
+                .arg2(.4)
+                .build();
+
+
         int index = 0;
         while (running) {
             try {
@@ -37,6 +45,14 @@ public class TestUser extends Thread {
                 interrupt();
             }
         }
+
+        Main.writeToFile(
+                timeline.getGenreCountMap(),
+                timeline.getArtistCountMap(),
+                timeline.getAverageBPM()
+        );
+
+        mpicker.pretendSQLquery();
     }
 
     @Override
