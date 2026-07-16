@@ -1,17 +1,23 @@
 package modelview;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
 import model.Song;
 
 import java.io.File;
 
 public class LibraryController {
+
+    @FXML
+    private ListView<Song> libraryList;
     
     private ObservableList<Song> librarySongs = FXCollections.observableArrayList();
 
-    public void LibraryController(){
+    @FXML
+    public void initialize(){
         loadSongs();
-
+        libraryList.setItems(librarySongs);
     }
 
     private void loadSongs(){
