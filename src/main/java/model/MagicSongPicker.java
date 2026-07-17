@@ -77,7 +77,7 @@ public class MagicSongPicker {
          HashSet<String> hs = new HashSet<>();
          Map<String,Integer> genreCountMap = t.getGenreCountMap();
 
-         int n = genreCountMap.get(t.mostPopularGenre());
+         int n = genreCountMap.get(t.topGenre());
          for (String s : genreCountMap.keySet())
              if (genreCountMap.get(s) > n * arg1)
                  hs.add(s);
@@ -116,6 +116,9 @@ public class MagicSongPicker {
          return new double[]{bpm * (1 - arg3), bpm * (1 + arg3)};
     }
 
+    /**
+     * a simple and uncommited demonstration of how the algorithm will query a suggestion
+     */
     public void pretendSQLquery() {
         Random index = new Random();
         HashSet<String> hs1 = byGenre(arg1, minutes);
@@ -127,6 +130,6 @@ public class MagicSongPicker {
         list = hs2.toArray();
         String b = (String) list[index.nextInt(0,list.length)];
 
-        System.out.println("Select FROM SONG WHERE genre = " + a + " AND artist = " + b+";");
+        System.out.println("SELECT FROM SONG WHERE genre = " + a + " AND artist = " + b+";");
     }
 }

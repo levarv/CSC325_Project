@@ -1,22 +1,15 @@
 package model;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class Timeline {
     private enum Scale {TENSECOND, MINUTE, HOUR, DAY, WEEK, MONTH;} //type of timeline
-    private final LinkedList<Timeframe> listOfTimeframes; //list of all timeframes TODO (this is a stand-in structure)
+    private final LinkedList<Song> songs; //list of all timeframes TODO (this is a stand-in structure)
     private final Map<String, Integer> genreCountMap = Main.getGenreCountMap(); //TODO implement genre count persistence
-    private LocalDateTime refreshTime; //the time a new timeframe is created
-    private Scale interval; //type of time frame
-    private Timeframe currentFrame; //current timeframe songs are being added to
+    private Scale interval; //type of timeline
     private final Map<String, Integer> artistCountMap = Main.getArtistCountMap(); //TODO implement artist count persistence
     private final double averageBPM = Main.getAverageBPM(); //TODO implement average BPM persistence
 
@@ -30,29 +23,27 @@ public class Timeline {
         } catch (IllegalArgumentException e) {
             System.out.println("Acceptable arg: TENSECOND | MINUTE | HOUR | DAY | WEEK | MONTH");
         }
-        listOfTimeframes = new LinkedList<>();
-        refreshTime = updateRefreshTime();
-        currentFrame = new Timeframe(interval.name(), this);
+        songs = new LinkedList<>();
     }
 
     /**
-     * updateRefreshTime
-     * sets the start of the timeline or the beginning
-     * of the next timeframe in the timeline.
+     * establishCutOff
+     * Used to disregard older listens
      * @return see
      */
-    public LocalDateTime updateRefreshTime() {
-        if (refreshTime == null)
-            return LocalDateTime.now();
+    public boolean establishCutOff(LocalDateTime dateOfSong) {
+        LocalDateTime then = null;
 
-        return switch (interval) {
-            case TENSECOND -> refreshTime.plusSeconds(10L);
-            case MINUTE -> refreshTime.plusMinutes(1L);
-            case HOUR -> refreshTime.plusHours(1L);
-            case DAY -> refreshTime.plusDays(1L);
-            case WEEK -> refreshTime.plusWeeks(1L);
-            case MONTH -> refreshTime.plusMonths(1L);
+        switch (interval) {
+            case TENSECOND -> then = LocalDateTime.now().minusSeconds(10L);
+            case MINUTE -> then = LocalDateTime.now().minusMinutes(1L);
+            case HOUR -> then = LocalDateTime.now().minusHours(1L);
+            case DAY -> then = LocalDateTime.now().minusDays(1L);
+            case WEEK -> then = LocalDateTime.now().minusWeeks(1L);
+            case MONTH -> then = LocalDateTime.now().minusMonths(1L);
         };
+        //if before the cutoff, return false
+        return !dateOfSong.isBefore(then);
     }
 
     /**
@@ -77,30 +68,41 @@ public class Timeline {
         return artistCountMap;
     }
 
-    /**
-     * addSong
-     * adds song to the current timeframe in the
-     * timeline
-     * @param song
-     */
-    public void addSong(Song song) {
-        currentFrame.add(song);
-        System.out.println(song);
-        if (LocalDateTime.now().isAfter(refreshTime)) {
-            listOfTimeframes.add(currentFrame);
-            currentFrame = new Timeframe(interval.name(), this);
-            refreshTime = updateRefreshTime();
-        }
+    public void add(Song song) {
+        songs.add(song);
+        genreCountMap.compute(
+                song.getGenre(),
+                (k, count) -> {
+                    return (count == null ? 0 : count) + 1;
+                }
+        );
+        artistCountMap.compute(
+                song.getArtist(),
+                (k, count) -> {
+                    return (count == null ? 0 : count) + 1;
+                }
+        );
+
     }
 
     /**
-     * mostPopularGenre
-     * @return mostPopularGenre
+     * topGenre
+     * @return topGenre with a similar methodology to Song class
      */
-    public String mostPopularGenre() {
-        Map<String, Integer> map = genreCountMap;
+    public String topGenre() {
+        HashMap<String, Integer> map = Main.getGenreCountMap();
         String mostPopularGenre = null;
         int max = 0;
+
+        for (Song s : songs)
+            if (establishCutOff(s.getLastListen()))
+                map.compute(
+                        s.getGenre(),
+                        (k, count) -> {
+                            return (count == null ? 0 : count) + 1;
+                        }
+                );
+            else songs.remove(s);
 
         for (String s : map.keySet())
             if (max < map.get(s)) {
@@ -112,13 +114,49 @@ public class Timeline {
     }
 
     /**
+     * averageBPM
+     * @return average bpm with a similar methodology to Song class
+     */
+    public int averageBPM() {
+        int sum = 0;
+        int n = 0;
+        int bpm = 0;
+
+        for (Song s : songs) {
+            if (establishCutOff(s.getLastListen())) {
+                bpm = s.getBpm();
+                if (bpm > 0) {
+                    sum += bpm;
+                    ++n;
+                }
+            }
+            else songs.remove(s);
+        }
+
+        if (n == 0)
+            return -1;
+        else
+            return (sum / n);
+    }
+
+    /**
      * mostPopularArtist
-     * @return mostPopularArtist
+     * @return most popular artist with a similar methodology to Song class
      */
     public String mostPopularArtist() {
-        Map<String, Integer> map = artistCountMap;
+        HashMap<String, Integer> map = Main.getArtistCountMap();
         String mostPopularArtist = null;
         int max = 0;
+
+        for (Song s : songs)
+            if (establishCutOff(s.getLastListen()))
+                map.compute(
+                        s.getArtist(),
+                        (k, count) -> {
+                            return (count == null ? 0 : count) + 1;
+                        }
+                );
+            else songs.remove(s);
 
         for (String s : map.keySet())
             if (max < map.get(s)) {
@@ -127,23 +165,16 @@ public class Timeline {
             }
 
         return mostPopularArtist;
-
     }
-
     /**
-     * averageBPM
-     * @return averageBPM
+     * toString
+     * @return string representation of timeframe
      */
-    public Double averageBPM() {
-        double sum = 0;
-        double count = 0;
-        for (Timeframe t : listOfTimeframes) {
-            sum += t.averageBPM();
-            ++count;
-        }
-        if (count == 0)
-            return null;
-        else
-            return sum / count;
+    @Override
+    public String toString() {
+        return "testbench.TimeFrame{" +
+                "scale=" + interval +
+                ", musicList=" + songs +
+                '}';
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.media.Media;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
@@ -18,25 +19,10 @@ public class Song implements Scorable {
     private String artist;  //artist of song
     private int bpm;  //bpm of song
     private Media media; //java fx media object to be accepted by player
-
-    /**
-     * constructor for testing
-     *
-     * @param name   name of song
-     * @param bpm    bpm attribute
-     * @param genre  genre category
-     * @param artist artist name
-     */
-    public Song(String name, int bpm, String genre, String artist) {
-        this.name = name;
-        this.bpm = bpm;
-        this.genre = genre;
-        this.artist = artist;
-    }
+    private LocalDateTime lastListen;
 
     /**
      * constructor from database
-     *
      * @param name   name of song
      * @param bpm    bpm attribute
      * @param genre  genre category
@@ -53,7 +39,6 @@ public class Song implements Scorable {
 
     /**
      * constructor from file picker
-     *
      * @param file mp3 test file
      */
     public Song(File file) {
@@ -83,19 +68,8 @@ public class Song implements Scorable {
         }
     }
 
-    /*
-        Test Method
-     */
-    public static Song randomSong() {
-        Random rng = new Random();
-        ArrayList<String> tempList = new ArrayList<>(Main.getGenreCountMap().keySet());
-        int rand = rng.nextInt(0, tempList.size());
-        return new Song("" + rand + rand + rand + rand, rand, tempList.get(rand), tempList.get(rand));
-    }
-
     /**
      * genreScore
-     *
      * @param t Timeline to derive score
      * @return n/N where:
      * n = number of times this song's genre appeared in Timeline t
@@ -106,7 +80,7 @@ public class Song implements Scorable {
         Map<String, Integer> map = t.getGenreCountMap();
 
         Integer thisCount = map.get(this.genre);
-        Integer topCount = map.get(t.mostPopularGenre());
+        Integer topCount = map.get(t.topGenre());
 
         if (thisCount != null && topCount != null)
             return (double) thisCount / topCount;
@@ -116,14 +90,13 @@ public class Song implements Scorable {
 
     /**
      * BPMScore
-     *
      * @param t Timeline to derive score
      * @return this song's error relative to the average bpm
      * (relative error is similar to percent error)
      */
     @Override
     public double BPMScore(Timeline t) {
-        Double avgBpm = t.averageBPM();
+        Integer avgBpm = t.averageBPM();
 
         if (avgBpm != null && this.bpm != 0)
             return Math.abs(t.averageBPM() - this.bpm) / t.averageBPM();
@@ -132,9 +105,8 @@ public class Song implements Scorable {
     }
 
     /**
-     *
+     * artistScore
      * @param t Timeline t
-     *
      * @return n/N where:
      * n = number of times this song's artist appeared in Timeline t
      * N = number of times any artist appeared in Timeline t
@@ -154,7 +126,6 @@ public class Song implements Scorable {
 
     /**
      * setMedia
-     *
      * @param media to be set
      */
     public void setMedia(Media media) {
@@ -163,7 +134,6 @@ public class Song implements Scorable {
 
     /**
      * getGenre
-     *
      * @return genre
      */
     public String getGenre() {
@@ -172,7 +142,6 @@ public class Song implements Scorable {
 
     /**
      * getName
-     *
      * @return name
      */
     public String getName() {
@@ -181,7 +150,6 @@ public class Song implements Scorable {
 
     /**
      * getArtist
-     *
      * @return artist
      */
     public String getArtist() {
@@ -190,7 +158,6 @@ public class Song implements Scorable {
 
     /**
      * getBpm
-     *
      * @return bpm
      */
     public int getBpm() {
@@ -198,8 +165,19 @@ public class Song implements Scorable {
     }
 
     /**
+     * getLastListen
+     * @return lastListen
+     */
+    public LocalDateTime getLastListen() { return lastListen; }
+
+    /**
+     * setLastListen
+     * @param lastListen
+     */
+    public void setLastListen(LocalDateTime lastListen) { this.lastListen = lastListen; }
+
+    /**
      * toString
-     *
      * @return String representation of this Song
      */
     @Override

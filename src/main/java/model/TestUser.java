@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 /*
@@ -36,9 +37,11 @@ public class TestUser extends Thread {
         int index = 0;
         while (running) {
             try {
-                sleep(rng.nextLong(400, 800));
+                sleep(rng.nextLong(4000, 8000));
 
-                timeline.addSong(test[index]);
+                timeline.add(test[index]);
+                test[index].setLastListen(LocalDateTime.now());
+
                 ++index;
                 index = index % test.length;
             } catch (InterruptedException e) {

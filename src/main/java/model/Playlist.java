@@ -73,8 +73,6 @@ public class Playlist implements Scorable {
      * Check if playlist is an album
      * @return isAnAlbum t/f value
      */
-
-
     public boolean isAnAlbum() {
         return isAnAlbum;
     }
