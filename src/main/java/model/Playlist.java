@@ -15,40 +15,69 @@ public class Playlist implements Scorable {
      */
     public Playlist(String name, ArrayList<Song> songs, boolean isAnAlbum) {
         this.name = name;
-        this.songs = songs;
+        this.songs = songs != null ? songs : new ArrayList<>(); // Prevents empty playlist from crashing - RD
         this.isAnAlbum = isAnAlbum;
     }
 
     /**
      * getName returns playlist name - RD
-     * @return name
+     * @return playlist name
      */
     public String getName() {
         return name;
     }
 
-    // Sets name of playlist, used to rename playlist - RD
+    /**
+     * setName sets name of playlist
+     * @param name playlist name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
      * getSongs returns playlist songs within playlist - RD
-     * @return songs
+     * @return list of songs
      */
     public ArrayList<Song> getSongs() {
         return songs;
     }
 
     /**
-     * getSongsCount returns playlist size - RD
-     * @return songs.size()
+     * getSongCount returns playlist size - RD
+     * @return playlist song count
      */
-    public int getSongsCount() {
+    public int getSongCount() {
         return songs.size();
     }
 
+    /**
+     * addSong adds song to playlist - RD
+     * @param song song added to playlist
+     */
+    public void addSong(Song song) {
 
+        songs.add(song);
+    }
+
+    /**
+     * removeSong removes song from playlist - RD
+     * @param song song removed from playlist
+     */
+    public void removeSong(Song song) {
+
+        songs.remove(song);
+    }
+
+    /**
+     * Check if playlist is an album
+     * @return isAnAlbum t/f value
+     */
+
+
+    public boolean isAnAlbum() {
+        return isAnAlbum;
+    }
 
     /**
      * genreScore
