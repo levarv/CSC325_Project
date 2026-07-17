@@ -24,6 +24,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>26</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>26</version>
+        </dependency>
+
         <!-- Source: https://mvnrepository.com/artifact/com.mpatric/mp3agic -->
         <dependency>
             <groupId>com.mpatric</groupId>
