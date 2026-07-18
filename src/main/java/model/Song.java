@@ -187,6 +187,7 @@ public class Song implements Scorable {
                 ", name='" + name + '\'' +
                 ", artist='" + artist + '\'' +
                 ", bpm=" + bpm +
+                ", lastListen=" + lastListen +
                 '}';
     }
 }

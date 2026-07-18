@@ -39,8 +39,8 @@ public class TestUser extends Thread {
             try {
                 sleep(rng.nextLong(4000, 8000));
 
-                timeline.add(test[index]);
                 test[index].setLastListen(LocalDateTime.now());
+                timeline.add(test[index]);
 
                 ++index;
                 index = index % test.length;
@@ -56,6 +56,9 @@ public class TestUser extends Thread {
         );
 
         mpicker.pretendSQLquery();
+
+        System.out.println("Songs retained");
+        System.out.println(timeline.getSongs().size());
     }
 
     @Override

@@ -1,17 +1,17 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class Timeline {
     private enum Scale {TENSECOND, MINUTE, HOUR, DAY, WEEK, MONTH;} //type of timeline
-    private final LinkedList<Song> songs; //list of all timeframes TODO (this is a stand-in structure)
-    private final Map<String, Integer> genreCountMap = Main.getGenreCountMap(); //TODO implement genre count persistence
+    private final ArrayList<Song> songs; //list of all songs in the session
+    private final Map<String, Integer> genreCountMap = Main.getGenreCountMap();
     private Scale interval; //type of timeline
-    private final Map<String, Integer> artistCountMap = Main.getArtistCountMap(); //TODO implement artist count persistence
-    private final double averageBPM = Main.getAverageBPM(); //TODO implement average BPM persistence
+    private final Map<String, Integer> artistCountMap = Main.getArtistCountMap();
+    private final double averageBPM = Main.getAverageBPM();
 
     /**
      * constructor
@@ -23,7 +23,7 @@ public class Timeline {
         } catch (IllegalArgumentException e) {
             System.out.println("Acceptable arg: TENSECOND | MINUTE | HOUR | DAY | WEEK | MONTH");
         }
-        songs = new LinkedList<>();
+        songs = new ArrayList<>();
     }
 
     /**
@@ -42,8 +42,16 @@ public class Timeline {
             case WEEK -> then = LocalDateTime.now().minusWeeks(1L);
             case MONTH -> then = LocalDateTime.now().minusMonths(1L);
         };
-        //if before the cutoff, return false
-        return !dateOfSong.isBefore(then);
+
+        return dateOfSong.isAfter(then);
+    }
+
+    /**
+     * getSongs
+     * @return songs A list of songs
+     */
+    public ArrayList<Song> getSongs() {
+        return songs;
     }
 
     /**
@@ -82,7 +90,7 @@ public class Timeline {
                     return (count == null ? 0 : count) + 1;
                 }
         );
-
+        System.out.println(song);
     }
 
     /**
@@ -94,15 +102,15 @@ public class Timeline {
         String mostPopularGenre = null;
         int max = 0;
 
-        for (Song s : songs)
-            if (establishCutOff(s.getLastListen()))
+        for (int i = 0; i < songs.size(); ++i)
+            if (establishCutOff(songs.get(i).getLastListen()))
                 map.compute(
-                        s.getGenre(),
+                        songs.get(i).getGenre(),
                         (k, count) -> {
                             return (count == null ? 0 : count) + 1;
                         }
                 );
-            else songs.remove(s);
+            else songs.remove(i);
 
         for (String s : map.keySet())
             if (max < map.get(s)) {
@@ -122,15 +130,15 @@ public class Timeline {
         int n = 0;
         int bpm = 0;
 
-        for (Song s : songs) {
-            if (establishCutOff(s.getLastListen())) {
-                bpm = s.getBpm();
+        for (int i = 0; i < songs.size(); ++i) {
+            if (establishCutOff(songs.get(i).getLastListen())) {
+                bpm = songs.get(i).getBpm();
                 if (bpm > 0) {
                     sum += bpm;
                     ++n;
                 }
             }
-            else songs.remove(s);
+            else songs.remove(i);
         }
 
         if (n == 0)
@@ -148,15 +156,15 @@ public class Timeline {
         String mostPopularArtist = null;
         int max = 0;
 
-        for (Song s : songs)
-            if (establishCutOff(s.getLastListen()))
+        for (int i = 0; i < songs.size(); ++i)
+            if (establishCutOff(songs.get(i).getLastListen()))
                 map.compute(
-                        s.getArtist(),
+                        songs.get(i).getArtist(),
                         (k, count) -> {
                             return (count == null ? 0 : count) + 1;
                         }
                 );
-            else songs.remove(s);
+            else songs.remove(i);
 
         for (String s : map.keySet())
             if (max < map.get(s)) {

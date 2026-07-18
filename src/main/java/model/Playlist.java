@@ -79,7 +79,6 @@ public class Playlist implements Scorable {
 
     /**
      * genreScore
-     *
      * @param t Timeline to derive score
      * @return The average genre scores of each song
      */
@@ -94,7 +93,6 @@ public class Playlist implements Scorable {
 
     /**
      * genreScore
-     *
      * @param t Timeline to derive score
      * @return The average bpm score scores of each song
      */
@@ -109,7 +107,6 @@ public class Playlist implements Scorable {
 
     /**
      * genreScore
-     *
      * @param t Timeline to derive score
      * @return The average artist scores of each song
      */
