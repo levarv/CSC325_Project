@@ -1,14 +1,25 @@
 package model;
 
+import javafx.application.Application;
+import modelview.PlaylistApplication;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.ArrayList;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Properties;
 import static java.lang.Thread.sleep;
 
 public class Main {
@@ -17,6 +28,8 @@ public class Main {
     private static final HashMap<String, Integer> artistCountMap = new HashMap<>();
     private static double averageBPM = 0.0;
     private static final ArrayList<Song> playbackQueue = new ArrayList<>(); // Temporary Queue for functionality in Playlist Scene - RD
+    private static final File userDir = new File("src/main/resources/songs");
+    private static String timelineType = "HOUR";
 
     /**
      * writes the map entries to a text file
@@ -138,20 +151,52 @@ public class Main {
         playbackQueue.clear();
     }
 
+    /**
+     * loadSongsFromUserRepo
+     * loads music from the user repository into the
+     * relational db.
+     */
+    public static void loadSongsFromUserRepo() {
+        File[] listOfMP3s = userDir.listFiles();
+        Song tbAdded = null;
+        for (File mp3 : listOfMP3s) {
+            try {
+                if (mp3.toURI().toURL().toString().matches(".*\\.mp3")) {
+                    tbAdded = new Song(mp3);
+
+                    String update = String.format(
+                            "INSERT INTO Song (Artist,Name,BPM,ReleaseDate,Genre,ImageURL,SongURL)" +
+                            " VALUES ('%S', '%S', %S, '%S', '%S','%S','%S')",
+                            tbAdded.getArtist(),
+                            tbAdded.getName(),
+                            tbAdded.getBpm(),
+                            "NULL",
+                            tbAdded.getGenre(),
+                            "NULL",
+                            mp3.getPath()
+                    );
+
+                    SQLQuery.update(update);
+
+                }
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     public static void main(String[] args) {
 
-        ThreadGroup g = new ThreadGroup("g");
-        TestUser u = new TestUser("bob", g);
-        readFromFile(true);
-        u.start();
+        loadSongsFromUserRepo();
 
-        try {
-            sleep(20000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        Timeline t = new Timeline("HOUR");
 
-        u.interrupt();
+        MagicSongPicker mpicker = new MagicSongPicker.Builder()
+                .minutes(t)
+                .arg1(.5)
+                .arg2(.4)
+                .build();
+
+        Application.launch(PlaylistApplication.class, args);
     }
 }

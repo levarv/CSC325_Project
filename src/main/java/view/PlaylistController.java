@@ -163,35 +163,6 @@ public class PlaylistController {
 
         ArrayList<Song> summerSongs = new ArrayList<>();
 
-        summerSongs.add(new Song(
-                new File("src/main/resources/Home.mp3")
-        ));
-
-        summerSongs.add(new Song(
-                new File("src/main/resources/ClosetoHome.mp3")
-        ));
-
-        summerSongs.add(new Song(
-                new File("src/main/resources/AquaTofana.mp3")
-        ));
-
-        summerSongs.add(new Song(
-                new File("src/main/resources/RumbleFish.mp3")
-        ));
-
-        summerSongs.add(new Song(
-                new File("src/main/resources/Spikes.mp3")
-        ));
-
-        Playlist summerJams = new Playlist(
-                "SummerJams",
-                summerSongs,
-                "/images/summerjams.jpg",
-                false
-        );
-
-        playlists.add(summerJams);
-
         refreshPlaylists();
     }
 }

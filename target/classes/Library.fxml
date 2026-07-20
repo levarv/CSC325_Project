@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="modelview.LibraryController">
+<BorderPane xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="modelview.LibraryController">
 
-    <ListView fx:id="libraryList"/>
+    <top>
+        <VBox spacing="10">
+            <children>
+                <HBox alignment="CENTER" spacing="8">
+                    <children>
+                        <Button text="Home"
+                                onAction="#goHome"/>
 
-</VBox>
+                        <Button text="Playlist"
+                                onAction="#goPlaylist"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+
+    <center>
+        <ListView fx:id="libraryList"/>
+    </center>
+
+</BorderPane>
