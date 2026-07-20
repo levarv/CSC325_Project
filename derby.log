@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Jul 20 19:35:47 EDT 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-019f-81e2-ba62-0000009a4e50 
+on database directory /home/ronald/IdeaProjects/CapstoneProject/firstdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@14dad5dc 
+Loaded from file:/home/ronald/IdeaProjects/CapstoneProject/derbylib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=26.0.1+8-34
+user.dir=/home/ronald/IdeaProjects/CapstoneProject
+os.name=Linux
+os.arch=amd64
+os.version=7.0.0-27-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
