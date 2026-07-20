@@ -31,4 +31,14 @@ public class LibraryController {
     public ObservableList<Song> getLibrarySongs() {
         return librarySongs;
     }
+
+    @FXML 
+    private void goHome() {
+
+    }
+
+    @FXML
+    private void goPlaylist(){
+        
+    }
 }
