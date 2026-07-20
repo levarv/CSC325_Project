@@ -7,6 +7,7 @@ import javafx.scene.media.Media;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class Song implements Scorable {
     private int bpm;  //bpm of song
     private Media media; //java fx media object to be accepted by player
     private LocalDateTime lastListen;
+    private URL url;
 
     /**
      * constructor from database
@@ -58,6 +60,7 @@ public class Song implements Scorable {
                 this.artist = mp3file.getId3v1Tag().getArtist();
                 //this.media = new Media(file.getPath());
             }
+            this.url = file.toURI().toURL();
 
         } catch (InvalidDataException e) {
             throw new RuntimeException(e);
@@ -169,6 +172,12 @@ public class Song implements Scorable {
      * @return lastListen
      */
     public LocalDateTime getLastListen() { return lastListen; }
+
+    /**
+     * getUrl
+     * @return url
+     */
+    public URL getUrl() { return url; }
 
     /**
      * setLastListen

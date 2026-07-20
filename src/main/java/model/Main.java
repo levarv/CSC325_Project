@@ -197,6 +197,8 @@ public class Main {
                 .arg2(.4)
                 .build();
 
-        Application.launch(PlaylistApplication.class, args);
+       /*
+                   > Get everything going here <
+        */
     }
 }
