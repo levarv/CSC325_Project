@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CreatePlaylistController">
+   <children>
+      <VBox prefHeight="450.0" prefWidth="350.0">
+         <children>
+            <Label alignment="CENTER" text="Create Playlist" />
+            <TextField fx:id="playlistNameField" />
+            <Label text="Avaliable Songs List" />
+            <ListView fx:id="songListView" prefHeight="200.0" prefWidth="350.0" />
+            <Label text="Cover Image (Optional)" />
+            <Button fx:id="chooseImageButton" mnemonicParsing="false" onAction="#chooseImage" text="Upload" />
+            <Label fx:id="selectedImageLabel" text="No Image Selected" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="280.0">
+               <children>
+                  <Button fx:id="createButton" mnemonicParsing="false" onAction="#createPlaylist" text="Create" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel" />
+               </children>
+               <padding>
+                  <Insets top="50.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</AnchorPane>

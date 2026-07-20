@@ -6,16 +6,19 @@ public class Playlist implements Scorable {
     private String name;
     private ArrayList<Song> songs; //list of songs in playlist
     private boolean isAnAlbum; //determines if this collection of songs is an album
+    private String coverImagePath;
 
     /**
      * Constructor
      * @param name      Name of playlist - RD
      * @param songs     list of songs in playlist
+     * @param coverImagePath location of playlist cover if exists - RD
      * @param isAnAlbum is this an album?
      */
-    public Playlist(String name, ArrayList<Song> songs, boolean isAnAlbum) {
+    public Playlist(String name, ArrayList<Song> songs, String coverImagePath, boolean isAnAlbum) {
         this.name = name;
         this.songs = songs != null ? songs : new ArrayList<>(); // Prevents empty playlist from crashing - RD
+        this.coverImagePath = coverImagePath;
         this.isAnAlbum = isAnAlbum;
     }
 
@@ -33,6 +36,14 @@ public class Playlist implements Scorable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCoverImagePath() {
+        return coverImagePath;
+    }
+
+    public void setCoverImagePath(String coverImagePath) {
+        this.coverImagePath = coverImagePath;
     }
 
     /**

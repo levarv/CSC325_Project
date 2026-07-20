@@ -21,11 +21,11 @@ public class LibraryController {
     }
 
     private void loadSongs(){
-        librarySongs.add(new Song(new File("src/main/resource/AquaTofana.mp3")));
-        librarySongs.add(new Song(new File("src/main/resource/ClosetoHome.mp3")));
-        librarySongs.add(new Song(new File("src/main/resource/Home.mp3")));
-        librarySongs.add(new Song(new File("src/main/resource/RumbleFish.mp3")));
-        librarySongs.add(new Song(new File("src/main/resource/Spikes.mp3")));
+        librarySongs.add(new Song(new File("src/main/resources/AquaTofana.mp3")));
+        librarySongs.add(new Song(new File("src/main/resources/ClosetoHome.mp3")));
+        librarySongs.add(new Song(new File("src/main/resources/Home.mp3")));
+        librarySongs.add(new Song(new File("src/main/resources/RumbleFish.mp3")));
+        librarySongs.add(new Song(new File("src/main/resources/Spikes.mp3")));
     }
 
     public ObservableList<Song> getLibrarySongs() {

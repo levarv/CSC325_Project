@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
 
@@ -15,6 +16,7 @@ public class Main {
     private static final HashMap<String, Integer> genreCountMap = new HashMap<>();
     private static final HashMap<String, Integer> artistCountMap = new HashMap<>();
     private static double averageBPM = 0.0;
+    private static final ArrayList<Song> playbackQueue = new ArrayList<>(); // Temporary Queue for functionality in Playlist Scene - RD
 
     /**
      * writes the map entries to a text file
@@ -99,6 +101,41 @@ public class Main {
      */
     public static Double getAverageBPM() {
         return averageBPM;
+    }
+
+    /**
+     * Temporary Queue functionality for Playlist functionality - RD
+     * Adds every song from a playlist to the playback queue
+     * @param playlist playlist being added to the queue
+     */
+    public static void addPlaylistToQueue(Playlist playlist) {
+        playbackQueue.addAll(playlist.getSongs());
+    }
+
+    /**
+     * Temporary Queue functionality for Playlist functionality - RD
+     * Returns the current playback queue
+     * @return songs currently waiting in the queue
+     */
+    public static ArrayList<Song> getPlaybackQueue() {
+        return playbackQueue;
+    }
+
+    /**
+     * Temporary Queue functionality for Playlist functionality - RD
+     * Returns the number of songs currently in the queue
+     * @return queue size
+     */
+    public static int getQueueSize() {
+        return playbackQueue.size();
+    }
+
+    /**
+     * Temporary Queue functionality for Playlist functionality - RD
+     * Removes every song from the queue.
+     */
+    public static void clearQueue() {
+        playbackQueue.clear();
     }
 
 
