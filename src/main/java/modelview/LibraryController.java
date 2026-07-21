@@ -3,6 +3,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import model.SQLQuery;
 import model.Song;
 
 import java.io.File;
@@ -21,11 +22,7 @@ public class LibraryController {
     }
 
     private void loadSongs(){
-        librarySongs.add(new Song(new File("src/main/resources/AquaTofana.mp3")));
-        librarySongs.add(new Song(new File("src/main/resources/ClosetoHome.mp3")));
-        librarySongs.add(new Song(new File("src/main/resources/Home.mp3")));
-        librarySongs.add(new Song(new File("src/main/resources/RumbleFish.mp3")));
-        librarySongs.add(new Song(new File("src/main/resources/Spikes.mp3")));
+        SQLQuery.query("SELECT * FROM SONG");
     }
 
     public ObservableList<Song> getLibrarySongs() {

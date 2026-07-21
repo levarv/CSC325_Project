@@ -1,7 +1,6 @@
 package model;
 
-import javafx.application.Application;
-import modelview.PlaylistApplication;
+import modelview.Application;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,14 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Properties;
+
 import static java.lang.Thread.sleep;
 
 public class Main {
@@ -30,6 +22,8 @@ public class Main {
     private static final ArrayList<Song> playbackQueue = new ArrayList<>(); // Temporary Queue for functionality in Playlist Scene - RD
     private static final File userDir = new File("src/main/resources/songs");
     private static String timelineType = "HOUR";
+    private static MagicSongPicker mpicker;
+    private static Timeline t;
 
     /**
      * writes the map entries to a text file
@@ -91,6 +85,10 @@ public class Main {
             e.printStackTrace();
         }
     }
+
+    public static MagicSongPicker getSongPicker() { return mpicker; }
+
+    public static Timeline getTimeline() { return t; }
 
     /**
      * getGenreCountMap
@@ -189,16 +187,18 @@ public class Main {
 
         loadSongsFromUserRepo();
 
-        Timeline t = new Timeline("HOUR");
+        t = new Timeline("HOUR");
 
-        MagicSongPicker mpicker = new MagicSongPicker.Builder()
+       mpicker = new MagicSongPicker.Builder()
                 .minutes(t)
                 .arg1(.5)
                 .arg2(.4)
                 .build();
 
-       /*
-                   > Get everything going here <
-        */
+        playbackQueue.add(null);
+
+        playbackQueue.add(null);
+
+        Application.main(args);
     }
 }
