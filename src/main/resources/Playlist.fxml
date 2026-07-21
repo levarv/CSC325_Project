@@ -18,11 +18,11 @@
          <children>
             <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0" spacing="8.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="220.0" text="Home">
+                  <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="220.0" text="Home" fx:id="Home" onAction="#HomePressed">
                      <font>
                         <Font size="24.0" />
                      </font></Button>
-                  <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="220.0" text="Library">
+                  <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="220.0" text="Library" fx:id="Library" onAction="#LibraryPressed">
                      <font>
                         <Font size="24.0" />
                      </font></Button>

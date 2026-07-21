@@ -1,5 +1,6 @@
 package view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,8 +10,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import model.Playlist;
+import model.SceneManager;
 import model.Song;
 import javafx.scene.image.Image;
+
+import java.util.EventListener;
 import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +28,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class PlaylistController {
+    @FXML
+    public Button Library;
+
+    @FXML
+    public Button Home;
 
     @FXML
     private FlowPane playlistFlowPane;
@@ -33,6 +42,7 @@ public class PlaylistController {
 
     // Holds existing playlist objects for viewing - RD
     private ObservableList<Playlist> playlists = FXCollections.observableArrayList();
+
 
     // Used to refresh ObservableList playlists when playlist is created or modified - RD
     private void refreshPlaylists() {
@@ -164,5 +174,13 @@ public class PlaylistController {
         ArrayList<Song> summerSongs = new ArrayList<>();
 
         refreshPlaylists();
+    }
+
+    public void HomePressed(ActionEvent actionEvent) {
+        SceneManager.setScene(3);
+    }
+
+    public void LibraryPressed(ActionEvent actionEvent) {
+        SceneManager.setScene(2);
     }
 }

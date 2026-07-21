@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import model.SQLQuery;
+import model.SceneManager;
 import model.Song;
 
 import java.io.File;
@@ -31,11 +32,11 @@ public class LibraryController {
 
     @FXML 
     private void goHome() {
-
+        SceneManager.setScene(3);
     }
 
     @FXML
     private void goPlaylist(){
-        
+        SceneManager.setScene(2);
     }
 }

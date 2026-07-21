@@ -19,9 +19,11 @@ public class Application extends javafx.application.Application {
       //  loader = new FXMLLoader( getClass().getResource("/MusicPlayer.fxml") );
       //  SceneManager.addScene(new Scene(loader.load()),3);
 
-        stage.setTitle("Playlist");
-        stage.setScene(SceneManager.getScene(1));
-        stage.show();
+        stage.setTitle("Teller");
+
+        SceneManager.setStage(stage);
+
+        SceneManager.setScene(1);
     }
 
     public static void main(String[] args) {
