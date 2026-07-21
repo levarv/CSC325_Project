@@ -185,7 +185,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        loadSongsFromUserRepo();
+        //loadSongsFromUserRepo();
 
         t = new Timeline("HOUR");
 
@@ -195,9 +195,7 @@ public class Main {
                 .arg2(.4)
                 .build();
 
-        playbackQueue.add(null);
 
-        playbackQueue.add(null);
 
         Application.main(args);
     }

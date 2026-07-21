@@ -13,11 +13,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 import model.Main;
 import model.Song;
+import java.util.ArrayList;
+import model.SceneManager;
+
+import javafx.fxml.FXML;
+import model.SceneManager;
 
 
 public class MusicPlayerController {
 
-    private Song[] songs;
+    private ArrayList<Song> songs;
     private int currentIndex = 0;
 
     private MediaPlayer mediaPlayer;
@@ -70,70 +75,82 @@ public class MusicPlayerController {
     @FXML
     public void initialize() {
 
-        songs = new Song[]{
-                Main.getPlaybackQueue().get(0), Main.getPlaybackQueue().get(1),
-        };
-
+        songs = Main.getPlaybackQueue();
 
         setupQueue();
-
-
         drawStars();
 
-
-        loadSong();
-
-        volumeSlider.valueProperty()
-                .addListener((obs,oldValue,newValue)->{
-
-                    if(mediaPlayer != null){
-
+        volumeSlider.valueProperty().addListener(
+                (obs, oldValue, newValue) -> {
+                    if (mediaPlayer != null) {
                         mediaPlayer.setVolume(
-                                newValue.doubleValue()/100
+                                newValue.doubleValue() / 100.0
                         );
-
                     }
-
-                });
-
-    }
-
-
-
-
-    private void loadSong(){
-
-
-        if(mediaPlayer != null){
-
-            mediaPlayer.stop();
-
-            mediaPlayer.dispose();
-
-        }
-
-
-        currentSong = songs[currentIndex];
-
-        mediaPlayer = new MediaPlayer(
-                new Media(currentSong.getUrl().toString())
+                }
         );
 
-
-        updateSongInfo();
-
-        updateQueue();
-
-        setupSlider();
-
-        setupVisualizer();
-
-        setNextSongListener();
-
-        queueList.getSelectionModel()
-                .select(currentIndex);
+        if (!songs.isEmpty()) {
+            currentIndex = 0;
+            loadSong();
+        } else {
+            showEmptyQueue();
+        }
     }
 
+
+
+
+    private void loadSong() {
+
+        if (songs == null || songs.isEmpty()) {
+            showEmptyQueue();
+            return;
+        }
+
+        if (currentIndex < 0 || currentIndex >= songs.size()) {
+            currentIndex = 0;
+        }
+
+        Song selectedSong = songs.get(currentIndex);
+
+        if (selectedSong == null || selectedSong.getUrl() == null) {
+            System.err.println(
+                    "Cannot play song at queue index " + currentIndex
+            );
+
+            showEmptyQueue();
+            return;
+        }
+
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+        }
+
+        currentSong = selectedSong;
+
+        Media media = new Media(
+                currentSong.getUrl().toExternalForm()
+        );
+
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(volumeSlider.getValue() / 100.0);
+
+        updateSongInfo();
+        updateQueue();
+        setupSlider();
+        setupVisualizer();
+        setNextSongListener();
+
+        queueList.getSelectionModel().select(currentIndex);
+
+        mediaPlayer.setOnError(() -> {
+            System.err.println(
+                    "Media player error: " + mediaPlayer.getError()
+            );
+        });
+    }
 
 
 
@@ -155,29 +172,25 @@ public class MusicPlayerController {
 
 
 
-    private void updateQueue(){
+    private void updateQueue() {
+
+        if (songs == null || songs.isEmpty()) {
+            return;
+        }
 
         int nextIndex = currentIndex + 1;
 
-
-        if(nextIndex >= songs.length){
-
+        if (nextIndex >= songs.size()) {
             nextIndex = 0;
-
         }
 
+        nextQueuedSong = songs.get(nextIndex);
 
-        nextQueuedSong = songs[nextIndex];
-
-
-        if(nextSongLabel != null){
-
+        if (nextSongLabel != null && nextQueuedSong != null) {
             nextSongLabel.setText(
                     "Up Next: " + nextQueuedSong.getName()
             );
-
         }
-
     }
 
 
@@ -250,19 +263,20 @@ public class MusicPlayerController {
 
 
     @FXML
-    private void playSong(){
-
-        mediaPlayer.play();
-
+    private void playSong() {
+        if (mediaPlayer != null) {
+            mediaPlayer.play();
+        }
     }
 
 
 
+
     @FXML
-    private void pauseSong(){
-
-        mediaPlayer.pause();
-
+    private void pauseSong() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+        }
     }
 
     @FXML
@@ -275,10 +289,10 @@ public class MusicPlayerController {
 
 
     @FXML
-    private void stopSong(){
-
-        mediaPlayer.stop();
-
+    private void stopSong() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
     }
 
 
@@ -286,62 +300,65 @@ public class MusicPlayerController {
 
 
     @FXML
-    private void nextSong(){
+    private void nextSong() {
 
-        if(shuffle){
+        if (songs == null || songs.isEmpty()) {
+            showEmptyQueue();
+            return;
+        }
+
+        if (shuffle) {
 
             int randomIndex;
 
             do {
-                randomIndex = (int)(Math.random() * songs.length);
-            }
-            while(randomIndex == currentIndex && songs.length > 1);
+                randomIndex = (int) (Math.random() * songs.size());
+            } while (
+                    randomIndex == currentIndex &&
+                            songs.size() > 1
+            );
 
             currentIndex = randomIndex;
 
-        }
-        else{
+        } else {
 
             currentIndex++;
 
-            if(currentIndex >= songs.length){
+            if (currentIndex >= songs.size()) {
                 currentIndex = 0;
             }
-
         }
 
         loadSong();
 
-        mediaPlayer.play();
-
+        if (mediaPlayer != null) {
+            mediaPlayer.play();
+        }
     }
-
 
 
 
 
     @FXML
-    private void previousSong(){
+    private void previousSong() {
 
+        if (songs == null || songs.isEmpty()) {
+            showEmptyQueue();
+            return;
+        }
 
         currentIndex--;
 
-
-        if(currentIndex < 0){
-
-            currentIndex = songs.length-1;
-
+        if (currentIndex < 0) {
+            currentIndex = songs.size() - 1;
         }
-
 
         loadSong();
 
-
-        mediaPlayer.play();
-
-
+        if (mediaPlayer != null) {
+            mediaPlayer.play();
+        }
     }
-
 
 
 
@@ -592,28 +609,33 @@ public class MusicPlayerController {
     }
 
     //Setup Queue
-    private void setupQueue(){
+    private void setupQueue() {
 
         queueList.getItems().clear();
+
+        if (songs == null || songs.isEmpty()) {
+            return;
+        }
 
         queueList.getItems().addAll(songs);
 
         queueList.setOnMouseClicked(event -> {
 
-            int index = queueList.getSelectionModel().getSelectedIndex();
+            int index = queueList
+                    .getSelectionModel()
+                    .getSelectedIndex();
 
-            if(index >= 0){
+            if (index >= 0 && index < songs.size()) {
 
                 currentIndex = index;
 
                 loadSong();
 
-                mediaPlayer.play();
-
+                if (mediaPlayer != null) {
+                    mediaPlayer.play();
+                }
             }
-
         });
-
     }
     //shuffle songs method
     @FXML
@@ -655,6 +677,17 @@ public class MusicPlayerController {
         }
 
     }
+
+    //Check empty queue method
+    private void showEmptyQueue() {
+
+        songLabel.setText("No Song");
+        artistLabel.setText("Queue is empty");
+        currentTimeLabel.setText("0:00");
+        totalTimeLabel.setText("0:00");
+
+        progressSlider.setValue(0);
+    }
     //favorite song method
     @FXML
     private void favoriteSong(){
@@ -669,6 +702,35 @@ public class MusicPlayerController {
         }
 
     }
+
+    //Refresh Queue method lets the project refresh the player after adding a playlist:
+    public void refreshQueue() {
+
+        songs = Main.getPlaybackQueue();
+
+        setupQueue();
+
+        if (songs.isEmpty()) {
+            currentIndex = 0;
+
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer.dispose();
+                mediaPlayer = null;
+            }
+
+            showEmptyQueue();
+            return;
+        }
+
+        if (currentIndex >= songs.size()) {
+            currentIndex = 0;
+        }
+
+        loadSong();
+    }
+
+    //menu methods
 
     //Library, playlists, home, and settings methods
     @FXML
@@ -690,4 +752,10 @@ public class MusicPlayerController {
     private void openSettings(){
         System.out.println("Settings clicked");
     }
+
+    @FXML
+    private void openMenu() {
+        SceneManager.setScene(1);
+    }
+
 }

@@ -1,33 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/26"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="modelview.LibraryController">
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="modelview.LibraryController"
+            stylesheets="@style.css"
+            styleClass="library-root"
+            prefWidth="1200"
+            prefHeight="750">
 
-    <top>
-        <VBox spacing="10">
-            <children>
-                <HBox alignment="CENTER" spacing="8">
-                    <children>
-                        <Button text="Home"
-                                onAction="#goHome"/>
+    <left>
+        <VBox prefWidth="260"
+              minWidth="260"
+              spacing="18"
+              alignment="TOP_CENTER"
+              styleClass="library-sidebar">
 
-                        <Button text="Playlist"
-                                onAction="#goPlaylist"/>
-                    </children>
-                </HBox>
-            </children>
+            <Label text="NIGHT MUSIC"
+                   styleClass="sidebar-logo"/>
+
+            <Button text="Home"
+                    onAction="#goHome"
+                    styleClass="sidebar-button"/>
+
+            <Button text="Library"
+                    styleClass="sidebar-button-active"/>
+
+            <Button text="Playlists"
+                    onAction="#goPlaylist"
+                    styleClass="sidebar-button"/>
         </VBox>
-    </top>
+    </left>
 
     <center>
-        <ListView fx:id="libraryList"/>
+        <VBox spacing="24"
+              alignment="TOP_CENTER"
+              styleClass="library-content">
+
+            <Label text="Your Music Library"
+                   styleClass="library-title"/>
+
+            <TextField promptText="Search songs..."
+                       maxWidth="520"
+                       prefHeight="48"
+                       styleClass="library-search"/>
+
+
+            <Button text="+ Import Song"
+                    onAction="#importSong"
+                    prefWidth="180"
+                    prefHeight="42"
+                    styleClass="import-song-button"/>
+
+            <ListView fx:id="libraryList"
+                      maxWidth="850"
+                      prefHeight="560"
+                      styleClass="library-list"/>
+        </VBox>
     </center>
 
 </BorderPane>

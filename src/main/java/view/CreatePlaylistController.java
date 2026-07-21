@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import model.Main;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -112,21 +113,14 @@ public class CreatePlaylistController {
     @FXML
     public void initialize() {
 
-        // Allow multiple songs to be added to a playlist - RD
         songListView.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
 
-        // Add existing sample songs - RD
-        songListView.getItems().addAll(
-                new Song(new File("src/main/resources/AquaTofana.mp3")),
-                new Song(new File("src/main/resources/ClosetoHome.mp3")),
-                new Song(new File("src/main/resources/Home.mp3")),
-                new Song(new File("src/main/resources/RumbleFish.mp3")),
-                new Song(new File("src/main/resources/Spikes.mp3"))
+        songListView.getItems().setAll(
+                Main.getPlaybackQueue()
         );
 
-        // Display Song name - RD
         songListView.setCellFactory(list -> new ListCell<>() {
             @Override
             protected void updateItem(Song song, boolean empty) {

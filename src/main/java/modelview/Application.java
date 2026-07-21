@@ -5,25 +5,60 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.SceneManager;
 
+import java.net.URL;
+
 public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/Playlist.fxml") );
-        SceneManager.addScene(new Scene(loader.load()),1);
+        URL stylesheet = getClass().getResource("/style.css");
 
-        loader = new FXMLLoader( getClass().getResource("/Library.fxml") );
-        SceneManager.addScene(new Scene(loader.load()),2);
+        if (stylesheet == null) {
+            throw new IllegalStateException(
+                    "style.css was not found in src/main/resources"
+            );
+        }
 
-      //  loader = new FXMLLoader( getClass().getResource("/MusicPlayer.fxml") );
-      //  SceneManager.addScene(new Scene(loader.load()),3);
+        // Playlist Scene
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/Playlist.fxml")
+        );
+
+        Scene playlistScene = new Scene(loader.load());
+        playlistScene.getStylesheets().add(stylesheet.toExternalForm());
+
+        SceneManager.addScene(playlistScene, 1);
+
+
+        // Library Scene
+        loader = new FXMLLoader(
+                getClass().getResource("/Library.fxml")
+        );
+
+        Scene libraryScene = new Scene(loader.load());
+        libraryScene.getStylesheets().add(stylesheet.toExternalForm());
+
+        SceneManager.addScene(libraryScene, 2);
+
+
+        // Music Player Scene
+        loader = new FXMLLoader(
+                getClass().getResource("/hello-view.fxml")
+        );
+
+        Scene musicPlayerScene = new Scene(loader.load());
+        musicPlayerScene.getStylesheets().add(stylesheet.toExternalForm());
+
+        SceneManager.addScene(musicPlayerScene, 3);
+
 
         stage.setTitle("Teller");
 
         SceneManager.setStage(stage);
 
-        SceneManager.setScene(1);
+// Start on Library scene
+        SceneManager.setScene(2);
     }
 
     public static void main(String[] args) {

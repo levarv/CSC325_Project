@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import model.Main;
 import model.Playlist;
 import model.Song;
+import model.SceneManager;
 
 import java.util.Objects;
 
@@ -116,13 +117,26 @@ public class PlaylistDetailsController {
     // Functionality pending based on player implementation - RD
     @FXML
     private void playPlaylist() {
-        showMessage(
-                "Play Playlist",
-                "Playback has not been implemented yet: \""
-                        + playlist.getName() + "\"."
-        );
-    }
 
+        if (playlist == null || playlist.getSongs().isEmpty()) {
+            showMessage(
+                    "Play Playlist",
+                    "This playlist does not contain any songs."
+            );
+            return;
+        }
+
+        Main.clearQueue();
+        Main.addPlaylistToQueue(playlist);
+
+
+
+        if (detailsStage != null) {
+            detailsStage.close();
+        }
+
+        SceneManager.setScene(3);
+    }
 
     @FXML
     private void addToQueue() {

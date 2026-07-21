@@ -1,51 +1,86 @@
 package model;
 
+import java.io.File;
 import java.sql.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class SQLQuery {
 
-    public static void query(String query) {
-        final String DATABASE_URL = "jdbc:derby:firstdb";
-        String[] tbReturned = null;
-        System.out.println(query);
-        // use try-with-resources to connect to and query the database
+    private static final String DATABASE_URL = "jdbc:derby:firstdb";
+
+    public static ArrayList<Song> getSongs() {
+
+        ArrayList<Song> songs = new ArrayList<>();
+
+        String query = "SELECT * FROM SONG";
+
         try (
-                Connection connection = DriverManager.getConnection(
-                        DATABASE_URL);
+                Connection connection =
+                        DriverManager.getConnection(DATABASE_URL);
 
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(query)) {
+                Statement statement =
+                        connection.createStatement();
 
-            for (int i = 1; resultSet.next(); ++i)
-                System.out.println( resultSet.getObject(i).toString() );
+                ResultSet resultSet =
+                        statement.executeQuery(query)
+        ) {
+
+            ResultSetMetaData meta = resultSet.getMetaData();
+
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
+                System.out.println(
+                        "Column " + i + ": " + meta.getColumnName(i)
+                );
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
 
-        catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+        return songs;
+    }
+
+    public static void addSong(File songFile) {
+
+        // Change this after checking the printed database columns.
+        String query = "INSERT INTO SONG (FILE_PATH) VALUES (?)";
+
+        try (
+                Connection connection =
+                        DriverManager.getConnection(DATABASE_URL);
+
+                PreparedStatement statement =
+                        connection.prepareStatement(query)
+        ) {
+
+            statement.setString(
+                    1,
+                    songFile.getAbsolutePath()
+            );
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
     public static void update(String update) {
-        final String DATABASE_URL = "jdbc:derby:firstdb";
-        final String UPDATE = update;
-        System.out.println(update);
-        // use try-with-resources to connect to and query the database
-        try (
-                Connection connection = DriverManager.getConnection(
-                        DATABASE_URL);
 
-                Statement statement = connection.createStatement();
+        System.out.println(update);
+
+        try (
+                Connection connection =
+                        DriverManager.getConnection(DATABASE_URL);
+
+                Statement statement =
+                        connection.createStatement()
         ) {
 
-            statement.executeUpdate(UPDATE);
+            statement.executeUpdate(update);
 
-        }
-        catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 }
-
-
-

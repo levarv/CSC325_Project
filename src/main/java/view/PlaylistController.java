@@ -25,6 +25,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
+import model.Main;
+
 import java.io.IOException;
 
 public class PlaylistController {
@@ -167,6 +170,7 @@ public class PlaylistController {
         }
     }
 
+
     // Create sample playlist - RD
     @FXML
     public void initialize() {
@@ -183,4 +187,6 @@ public class PlaylistController {
     public void LibraryPressed(ActionEvent actionEvent) {
         SceneManager.setScene(2);
     }
+
+
 }

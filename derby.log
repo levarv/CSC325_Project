@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Mon Jul 20 21:42:10 EDT 2026:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-019f-8256-6f0b-00000099f190 
-on database directory /home/ronald/IdeaProjects/CapstoneProject/firstdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@14dad5dc 
-Loaded from file:/home/ronald/IdeaProjects/CapstoneProject/derbylib/derby.jar
+Tue Jul 21 18:17:15 EDT 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-019f-86c1-2efb-00000e69e040 
+on database directory C:\Users\kaife\IdeaProjects\CapstoneProject\firstdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@14dad5dc 
+Loaded from file:/C:/Users/kaife/.m2/repository/org/apache/derby/derby/10.17.1.0/derby-10.17.1.0.jar
 java.vendor=Oracle Corporation
-java.runtime.version=26.0.1+8-34
-user.dir=/home/ronald/IdeaProjects/CapstoneProject
-os.name=Linux
+java.runtime.version=25-loom+1-11
+user.dir=C:\Users\kaife\IdeaProjects\CapstoneProject
+os.name=Windows 11
 os.arch=amd64
-os.version=7.0.0-27-generic
+os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

@@ -1,31 +1,28 @@
-package model;/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
+package model;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- *
- * @author Ronald
- */
 public class SceneManager {
 
     public static Stage stage;
 
-    public static Scene[] sceneArr = new Scene[3];
+    private static final Scene[] scenes = new Scene[4];
 
-    public static void setStage(Stage stag){stage = stag;}
+    public static void setStage(Stage stag) {
+        stage = stag;
+    }
 
-    public static void addScene(Scene scene, int index){sceneArr[index] = scene;}
+    public static void addScene(Scene scene, int index) {
+        scenes[index] = scene;
+    }
 
-    public static Scene getScene(int i) {return sceneArr[i];}
+    public static Scene getScene(int index) {
+        return scenes[index];
+    }
 
     public static void setScene(int index) {
-        stage.setScene(sceneArr[index]);
+        stage.setScene(scenes[index]);
         stage.show();
     }
-    
 }
