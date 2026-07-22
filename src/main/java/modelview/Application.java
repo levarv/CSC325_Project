@@ -5,14 +5,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.SceneManager;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class Application extends javafx.application.Application {
-
+    static final URL stylesheet = Application.class.getResource("/style.css");
     @Override
-    public void start(Stage stage) throws Exception {
 
-        URL stylesheet = getClass().getResource("/style.css");
+    public void start(Stage stage) throws Exception {
 
         if (stylesheet == null) {
             throw new IllegalStateException(

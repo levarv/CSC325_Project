@@ -56,16 +56,6 @@ public class MagicSongPicker {
             public MagicSongPicker build() { return new MagicSongPicker(this); }
         }
 
-    /*      User controllable settings of the magic song picker gimmick:
-     *
-     *      1) Genre Novelty -- How likely am I to get a genre I normally list to?    TODO
-     *      2) Artist Novelty -- How likely am I to get a song by an artist I normally list to?    TODO
-     *      3) bpm function of time -- more energetic music will be discriminated against    TODO
-     *                                           at certain times of the day.
-     *      4) history weight -- are songs listened to months ago going to impact my recommendation    TODO
-     *                       as much as newly listened to ones.
-     */
-
     /**
      * byGenre
      * @param arg1 a factor between 0 - 1

@@ -53,7 +53,6 @@ public class Main {
         }
     }
 
-
     /**
      * readFromFile
      * instantiates the maps from a text file.
@@ -194,8 +193,6 @@ public class Main {
                 .arg1(.5)
                 .arg2(.4)
                 .build();
-
-
 
         Application.main(args);
     }

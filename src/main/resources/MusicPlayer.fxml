@@ -11,11 +11,9 @@
 <Label fx:id="songLabel" text="No Song Loaded"/>
 
 <HBox spacing="10" alignment="CENTER">
-
-<Button text="Play" onAction="#playSong"/>
-<Button text="Pause" onAction="#pauseSong"/>
-<Button text="Stop" onAction="#stopSong"/>
-<Button text="Next" onAction="#nextSong"/>
-</HBox>
-
-        </VBox>
+        <Button text="Play" onAction="#playSong"/>
+        <Button text="Pause" onAction="#pauseSong"/>
+        <Button text="Stop" onAction="#stopSong"/>
+        <Button text="Next" onAction="#nextSong"/>
+        </HBox>
+</VBox>

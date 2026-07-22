@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import modelview.Application;
 import modelview.MusicPlayerController;
 
 
@@ -178,24 +179,8 @@ public class PlaylistController {
         refreshPlaylists();
     }
 
-    public void HomePressed(ActionEvent actionEvent) {
-        URL stylesheet = getClass().getResource("/style.css");
+    public void HomePressed(ActionEvent actionEvent) { SceneManager.setScene(3); }
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/MusicPlayer.fxml")
-        );
-
-        Scene playerscene = null;
-        try {
-            playerscene = new Scene(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        playerscene.getStylesheets().add(stylesheet.toExternalForm());
-
-        SceneManager.addScene(playerscene, 3);
-
-    }
 
     public void LibraryPressed(ActionEvent actionEvent) {
         SceneManager.setScene(2);
