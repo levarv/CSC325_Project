@@ -6,7 +6,9 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 import javafx.scene.media.Media;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class Song implements Scorable {
     private int bpm;  //bpm of song
     private Media media; //java fx media object to be accepted by player
     private LocalDateTime lastListen;
-    private URL url;
+    private String url;
 
     /**
      * constructor from database
@@ -29,14 +31,13 @@ public class Song implements Scorable {
      * @param bpm    bpm attribute
      * @param genre  genre category
      * @param artist artist name
-     * @param file   mp3 test file
      */
-    public Song(String name, int bpm, String genre, String artist, File file) {
+    public Song(String name, int bpm, String genre, String artist, String url) {
         this.name = name;
         this.bpm = bpm;
         this.genre = genre;
         this.artist = artist;
-        this.media = new Media(file.getPath());
+        this.url = url;
     }
 
     /**
@@ -60,8 +61,10 @@ public class Song implements Scorable {
                 this.artist = mp3file.getId3v1Tag().getArtist();
                 //this.media = new Media(file.getPath());
             }
-            this.url = file.toURI().toURL();
+            this.url = file.toURI().toURL().toString();
 
+        } catch (FileNotFoundException e) {
+            SQLQuery.update("DELETE FROM SONG WHERE SongUrl = " + "'"+file.getPath()+"'");
         } catch (InvalidDataException e) {
             throw new RuntimeException(e);
         } catch (UnsupportedTagException e) {
@@ -177,7 +180,7 @@ public class Song implements Scorable {
      * getUrl
      * @return url
      */
-    public URL getUrl() { return url; }
+    public String getUrl() { return url; }
 
     /**
      * setLastListen
@@ -191,12 +194,6 @@ public class Song implements Scorable {
      */
     @Override
     public String toString() {
-        return "model.Song{" +
-                "genre=" + genre +
-                ", name='" + name + '\'' +
-                ", artist='" + artist + '\'' +
-                ", bpm=" + bpm +
-                ", lastListen=" + lastListen +
-                '}';
+        return name + "   " + artist + "   " + url;
     }
 }

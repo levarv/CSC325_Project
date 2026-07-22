@@ -9,11 +9,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import model.Playlist;
-import model.SceneManager;
-import model.Song;
+import model.*;
 import javafx.scene.image.Image;
 
+import java.net.URL;
 import java.util.EventListener;
 import java.util.Objects;
 import javafx.collections.FXCollections;
@@ -24,9 +23,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import modelview.MusicPlayerController;
 
-
-import model.Main;
 
 import java.io.IOException;
 
@@ -45,7 +43,6 @@ public class PlaylistController {
 
     // Holds existing playlist objects for viewing - RD
     private ObservableList<Playlist> playlists = FXCollections.observableArrayList();
-
 
     // Used to refresh ObservableList playlists when playlist is created or modified - RD
     private void refreshPlaylists() {
@@ -175,13 +172,29 @@ public class PlaylistController {
     @FXML
     public void initialize() {
 
-        ArrayList<Song> summerSongs = new ArrayList<>();
+        SQLQuery.playlistQuery("SELECT * FROM Playlists");
+        //playlists
 
         refreshPlaylists();
     }
 
     public void HomePressed(ActionEvent actionEvent) {
-        SceneManager.setScene(3);
+        URL stylesheet = getClass().getResource("/style.css");
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/MusicPlayer.fxml")
+        );
+
+        Scene playerscene = null;
+        try {
+            playerscene = new Scene(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        playerscene.getStylesheets().add(stylesheet.toExternalForm());
+
+        SceneManager.addScene(playerscene, 3);
+
     }
 
     public void LibraryPressed(ActionEvent actionEvent) {

@@ -1,5 +1,6 @@
 package view;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -10,6 +11,7 @@ import model.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Playlist;
+import model.SQLQuery;
 import model.Song;
 
 import javafx.scene.control.ListCell;
@@ -118,7 +120,7 @@ public class CreatePlaylistController {
         );
 
         songListView.getItems().setAll(
-                Main.getPlaybackQueue()
+                FXCollections.observableList(SQLQuery.query("SELECT * FROM SONG"))
         );
 
         songListView.setCellFactory(list -> new ListCell<>() {

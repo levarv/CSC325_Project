@@ -164,7 +164,7 @@ public class Main {
 
                     String update = String.format(
                             "INSERT INTO Song (Artist,Name,BPM,ReleaseDate,Genre,ImageURL,SongURL)" +
-                            " VALUES ('%S', '%S', %S, '%S', '%S','%S','%S')",
+                            " VALUES ('%s', '%s', %s, '%s', '%s','%s','%s')",
                             tbAdded.getArtist(),
                             tbAdded.getName(),
                             tbAdded.getBpm(),

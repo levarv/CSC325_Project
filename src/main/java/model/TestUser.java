@@ -17,11 +17,11 @@ public class TestUser extends Thread {
 
     public void run() {
         Song[] test = {
-                new Song(new File("src/main/resources/Home.mp3")),
-                new Song(new File("src/main/resources/RumbleFish.mp3")),
-                new Song(new File("src/main/resources/Spikes.mp3")),
-                new Song(new File("src/main/resources/AquaTofana.mp3")),
-                new Song(new File("src/main/resources/ClosetoHome.mp3"))
+                new Song(new File("src/main/resources/home.mp3")),
+                new Song(new File("src/main/resources/rumblefish.mp3")),
+                new Song(new File("src/main/resources/spikes.mp3")),
+                new Song(new File("src/main/resources/aquatofana.mp3")),
+                new Song(new File("src/main/resources/closetohome.mp3"))
         };
 
         Timeline timeline = new Timeline("TENSECOND");

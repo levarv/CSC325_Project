@@ -3,84 +3,77 @@ package model;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class SQLQuery {
 
-    private static final String DATABASE_URL = "jdbc:derby:firstdb";
-
-    public static ArrayList<Song> getSongs() {
-
-        ArrayList<Song> songs = new ArrayList<>();
-
-        String query = "SELECT * FROM SONG";
-
+    public static ArrayList<Song> query(String query) {
+        final String DATABASE_URL = "jdbc:derby:firstdb";
+        ArrayList<Song> tbReturned = new ArrayList<>();
+        System.out.println(query);
+        // use try-with-resources to connect to and query the database
         try (
-                Connection connection =
-                        DriverManager.getConnection(DATABASE_URL);
+                Connection connection = DriverManager.getConnection(
+                        DATABASE_URL);
 
-                Statement statement =
-                        connection.createStatement();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
 
-                ResultSet resultSet =
-                        statement.executeQuery(query)
-        ) {
-
-            ResultSetMetaData meta = resultSet.getMetaData();
-
-            for (int i = 1; i <= meta.getColumnCount(); i++) {
-                System.out.println(
-                        "Column " + i + ": " + meta.getColumnName(i)
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString(7));
+                tbReturned.add(
+                        new Song(new File(resultSet.getString(7)))
                 );
             }
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+            return tbReturned;
         }
 
-        return songs;
+        catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return null;
     }
 
-    public static void addSong(File songFile) {
-
-        // Change this after checking the printed database columns.
-        String query = "INSERT INTO SONG (FILE_PATH) VALUES (?)";
-
+    public static void playlistQuery(String query) {
+        final String DATABASE_URL = "jdbc:derby:firstdb";
+        ArrayList<Playlist> tbReturned = new ArrayList<>();
+        System.out.println(query);
+        // use try-with-resources to connect to and query the database
         try (
-                Connection connection =
-                        DriverManager.getConnection(DATABASE_URL);
+                Connection connection = DriverManager.getConnection(
+                        DATABASE_URL);
 
-                PreparedStatement statement =
-                        connection.prepareStatement(query)
-        ) {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
 
-            statement.setString(
-                    1,
-                    songFile.getAbsolutePath()
-            );
+            while (resultSet.next()) {
 
-            statement.executeUpdate();
+            }
+        }
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
     }
 
     public static void update(String update) {
-
+        final String DATABASE_URL = "jdbc:derby:firstdb";
+        final String UPDATE = update;
         System.out.println(update);
-
+        // use try-with-resources to connect to and query the database
         try (
-                Connection connection =
-                        DriverManager.getConnection(DATABASE_URL);
+                Connection connection = DriverManager.getConnection(
+                        DATABASE_URL);
 
-                Statement statement =
-                        connection.createStatement()
+                Statement statement = connection.createStatement();
         ) {
 
-            statement.executeUpdate(update);
+            statement.executeUpdate(UPDATE);
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+        }
+        catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
     }
 }

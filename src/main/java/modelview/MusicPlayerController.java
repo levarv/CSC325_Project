@@ -99,6 +99,12 @@ public class MusicPlayerController {
     }
 
 
+    public void refresh() {
+        songs = Main.getPlaybackQueue();
+        setupQueue();
+        drawStars();
+    }
+
 
 
     private void loadSong() {
@@ -131,7 +137,7 @@ public class MusicPlayerController {
         currentSong = selectedSong;
 
         Media media = new Media(
-                currentSong.getUrl().toExternalForm()
+                currentSong.getUrl()
         );
 
         mediaPlayer = new MediaPlayer(media);
@@ -250,9 +256,7 @@ public class MusicPlayerController {
                                         progressSlider.getValue()
                                 )
                         );
-
                     }
-
                 });
 
 
